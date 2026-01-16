@@ -1,21 +1,64 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* ---------- THEME TOKENS ---------- */
+/* default = light */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
+
+  --muted: rgba(10, 10, 10, 0.65);
+  --muted2: rgba(10, 10, 10, 0.45);
+
+  --border: rgba(10, 10, 10, 0.10);
+  --surface: rgba(10, 10, 10, 0.03);
+  --surface2: rgba(10, 10, 10, 0.06);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* explicit dark */
+html.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+
+  --muted: rgba(255, 255, 255, 0.75);
+  --muted2: rgba(255, 255, 255, 0.55);
+
+  --border: rgba(255, 255, 255, 0.12);
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface2: rgba(255, 255, 255, 0.06);
 }
 
+/* explicit light */
+html.light {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+
+  --muted: rgba(10, 10, 10, 0.65);
+  --muted2: rgba(10, 10, 10, 0.45);
+
+  --border: rgba(10, 10, 10, 0.10);
+  --surface: rgba(10, 10, 10, 0.03);
+  --surface2: rgba(10, 10, 10, 0.06);
+}
+
+/* when in AUTO mode (no html.dark/light), follow system */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #000000;
+    --foreground: #ffffff;
+
+    --muted: rgba(255, 255, 255, 0.75);
+    --muted2: rgba(255, 255, 255, 0.55);
+
+    --border: rgba(255, 255, 255, 0.12);
+    --surface: rgba(255, 255, 255, 0.03);
+    --surface2: rgba(255, 255, 255, 0.06);
   }
 }
 
