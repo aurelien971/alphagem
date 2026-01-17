@@ -18,7 +18,7 @@ export default function AboutPage() {
         <div className="mx-auto w-full max-w-6xl">
           <AboutHero />
 
-          <div className="mt-24 space-y-24">
+<div className="mt-12 space-y-16">
             <AboutSection />
             <div className="h-px w-full bg-[var(--border)]" />
 
