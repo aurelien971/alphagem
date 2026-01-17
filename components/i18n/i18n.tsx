@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
 
 import { HOME_EN, HOME_FR } from "./pages/home";
+import { ABOUT_EN, ABOUT_FR } from "./pages/about";
 import { SERVICES_EN, SERVICES_FR } from "./pages/services";
 import { PORTFOLIO_EN, PORTFOLIO_FR } from "./pages/portfolio";
 import { CONTACT_EN, CONTACT_FR } from "./pages/contact";
@@ -52,6 +53,7 @@ const COMMON_FR: Dict = {
 
 const PAGES_EN: Dict = {
   ...HOME_EN,
+  ...ABOUT_EN,
   ...SERVICES_EN,
   ...PORTFOLIO_EN,
   ...CONTACT_EN,
@@ -59,6 +61,7 @@ const PAGES_EN: Dict = {
 
 const PAGES_FR: Dict = {
   ...HOME_FR,
+  ...ABOUT_FR,
   ...SERVICES_FR,
   ...PORTFOLIO_FR,
   ...CONTACT_FR,

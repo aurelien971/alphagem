@@ -1,4 +1,9 @@
 export const SERVICES_EN: Record<string, string> = {
+  "services.hero.kicker": "SERVICES",
+  "services.hero.title": "Innovative services built for emerging markets",
+  "services.hero.body":
+    "We design and implement tailored financial engineering solutions across sectors, raising capital locally and regionally through rigorous structuring, modeling, and execution.",
+
   "services.overviewEyebrow": "OVERVIEW",
   "services.overviewTitle": "Structured, institutional, outcome-driven",
   "services.overviewBody":
@@ -78,7 +83,13 @@ export const SERVICES_EN: Record<string, string> = {
     "First mezzanine tranche securitization in UEMOA",
 };
 
+
 export const SERVICES_FR: Record<string, string> = {
+  "services.hero.kicker": "SERVICES",
+  "services.hero.title": "Des services innovants pour les marchés émergents",
+  "services.hero.body":
+    "Nous concevons et mettons en œuvre des solutions d’ingénierie financière sur mesure, permettant de lever des capitaux localement et régionalement grâce à une structuration, une modélisation et une exécution rigoureuses.",
+
   "services.overviewEyebrow": "APERÇU",
   "services.overviewTitle": "Structuré, institutionnel, orienté résultats",
   "services.overviewBody":
