@@ -8,30 +8,39 @@ import ValuesSection from "@/components/about/ValuesSection";
 export default function AboutPage() {
   return (
     <main className="bg-[var(--background)] text-[var(--foreground)] pb-[40vh]">
-      <div className="relative mx-auto flex max-w-[1400px] gap-10 px-4">
-        <aside className="hidden w-56 shrink-0 lg:block">
-          <div className="sticky top-1/2 -translate-y-1/2">
-            <SideSectionNav />
-          </div>
-        </aside>
+      {/* Full-bleed hero like Services */}
+      <AboutHero />
 
-        <div className="mx-auto w-full max-w-6xl">
-          <AboutHero />
+      {/* Constrained content */}
+      <section className="bg-[var(--background)] text-[var(--foreground)]">
+        <div className="relative mx-auto flex max-w-[1400px] gap-10 px-4">
+          <aside className="hidden w-56 shrink-0 lg:block">
+            <div className="sticky top-24 h-[calc(100vh-6rem)]">
+              <div className="flex h-full items-center">
+                <SideSectionNav />
+              </div>
+            </div>
+          </aside>
 
-<div className="mt-12 space-y-16">
-            <AboutSection />
-            <div className="h-px w-full bg-[var(--border)]" />
+          <div className="w-full">
+            <div className="mx-auto max-w-6xl pb-28 pt-16 md:pt-20">
+              <div className="space-y-16">
+                <AboutSection />
+                <div className="h-px w-full bg-[var(--border)]" />
 
-            <FiguresSection />
-            <div className="h-px w-full bg-[var(--border)]" />
+                <FiguresSection />
+                <div className="h-px w-full bg-[var(--border)]" />
 
-            <TeamSection />
-            {/* REMOVE divider here because ValuesSection already has border-t */}
+                <TeamSection />
 
-            <ValuesSection />
+                <ValuesSection />
+              </div>
+
+              <div className="h-24 md:h-32" />
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
