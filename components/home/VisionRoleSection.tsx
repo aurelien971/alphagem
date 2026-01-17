@@ -5,7 +5,7 @@ import { useI18n } from "@/components/i18n/i18n";
 
 function FrostedPanel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="h-full rounded-[26px] border border-white/12 bg-white/10 p-6 backdrop-blur-2xl shadow-[0_18px_70px_rgba(0,0,0,0.32)] ring-1 ring-inset ring-white/10 md:p-9">
+    <div className="h-full rounded-[11px] border border-white/12 bg-white/8 p-6 backdrop-blur-2xl shadow-[0_18px_70px_rgba(0,0,0,0.32)] ring-1 ring-inset ring-white/10 md:p-9">
       {children}
     </div>
   );
@@ -64,8 +64,8 @@ export default function VisionRoleSection() {
   return (
     <section id="vision" className="relative w-full overflow-hidden">
       <div className="relative min-h-[88vh] w-full">
-        <Image src="/hero-6.jpg" alt="" fill className="object-cover" />
-
+        <Image src="/hero-vision2.jpg" alt="" fill className="object-cover" />
+<div className="absolute inset-0 bg-black/15" />
         <div className="relative mx-auto flex min-h-[88vh] max-w-[1400px] items-center px-4 py-14 md:py-20">
           <div className="grid w-full items-stretch gap-6 lg:grid-cols-2 lg:gap-8">
             <FrostedPanel>

@@ -10,7 +10,7 @@ export const HOME_EN: Record<string, string> = {
   "home.hero.cta": "Read more",
 
   "home.vision.kicker": "LONG TERM VISION",
-  "home.vision.title": "Your long-term strategic partner",
+  "home.vision.title": "A long-term strategic partnership",
   "home.vision.body":
     "Supporting clients beyond transaction structuring, we design and execute structured finance solutions that strengthen local financing ecosystems and enable sustainable growth.",
 
@@ -56,7 +56,7 @@ export const HOME_FR: Record<string, string> = {
   "home.hero.cta": "En savoir plus",
 
   "home.vision.kicker": "VISION LONG TERME",
-  "home.vision.title": "Votre partenaire stratégique de long terme",
+  "home.vision.title": "Un partenaire stratégique de long terme",
   "home.vision.body":
     "Au delà de la structuration des transactions, nous concevons et exécutons des solutions de finance structurée qui renforcent les écosystèmes de financement locaux et soutiennent une croissance durable.",
 
