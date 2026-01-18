@@ -27,7 +27,7 @@ export default function HeroSection() {
   return (
     <section className="relative h-dvh w-full overflow-hidden">
       <Image src="/hero.jpg" alt="Hero" fill priority className="object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/75" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />
 
       <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-10 pt-24 sm:pb-14 sm:pt-28">
         <div className="w-full [text-shadow:0_2px_14px_rgba(0,0,0,0.55)]">

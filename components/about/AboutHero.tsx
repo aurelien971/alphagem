@@ -18,7 +18,7 @@ export default function AboutHero() {
       />
 
       {/* Match ServicesHero overlay style */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />
 
       <div className="relative mx-auto flex h-full max-w-[1400px] items-end px-4 pb-16 pt-28 md:pb-20">
         {/* Match About page layout: sidebar width (w-56 = 14rem) + gap-10 */}

@@ -17,7 +17,7 @@ export default function ServicesHero() {
         sizes="100vw"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/45 to-black/80" />
 
       <div className="relative mx-auto flex h-full max-w-[1400px] items-end px-4 pb-16 pt-28 md:pb-20">
         <div className="grid w-full items-end lg:grid-cols-[15rem_1fr] lg:gap-16">
