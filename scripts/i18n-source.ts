@@ -1,11 +1,11 @@
-import { ABOUT_EN, ABOUT_FR } from "../i18n/pages/about";
-import { CONTACT_EN, CONTACT_FR } from "../i18n/pages/contact";
-import { HOME_EN, HOME_FR } from "../i18n/pages/home";
-import { PORTFOLIO_EN, PORTFOLIO_FR } from "../i18n/pages/portfolio";
-import { SERVICES_EN, SERVICES_FR } from "../i18n/pages/services";
+import { ABOUT_EN, ABOUT_FR } from "../components/i18n/pages/about";
+import { CONTACT_EN, CONTACT_FR } from "../components/i18n/pages/contact";
+import { HOME_EN, HOME_FR } from "../components/i18n/pages/home";
+import { PORTFOLIO_EN, PORTFOLIO_FR } from "../components/i18n/pages/portfolio";
+import { SERVICES_EN, SERVICES_FR } from "../components/i18n/pages/services";
 
-import { COPY_EN } from "../i18n/copy.en";
-import { COPY_FR } from "../i18n/copy.fr";
+import { COPY_EN } from "../components/i18n/copy.en";
+import { COPY_FR } from "../components/i18n/copy.fr";
 
 export const PAGES = {
   about: { en: ABOUT_EN, fr: ABOUT_FR },
