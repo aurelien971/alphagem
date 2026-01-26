@@ -9,20 +9,37 @@ export default function ContactPage() {
   const { t } = useI18n();
   const [status, setStatus] = useState<Status>("idle");
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus("sending");
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setStatus("sending");
 
-    try {
-      await new Promise((r) => setTimeout(r, 450));
-      setStatus("sent");
-      (e.currentTarget as HTMLFormElement).reset();
-      setTimeout(() => setStatus("idle"), 1200);
-    } catch {
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 1600);
-    }
+  const form = e.currentTarget;
+  const fd = new FormData(form);
+
+  const payload = {
+    firstName: String(fd.get("firstName") ?? "").trim(),
+    lastName: String(fd.get("lastName") ?? "").trim(),
+    email: String(fd.get("email") ?? "").trim(),
+    message: String(fd.get("message") ?? "").trim(),
   };
+
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) throw new Error("Request failed");
+
+    setStatus("sent");
+    form.reset();
+    setTimeout(() => setStatus("idle"), 1200);
+  } catch {
+    setStatus("error");
+    setTimeout(() => setStatus("idle"), 1600);
+  }
+};
 
   const badgeText =
     status === "sending"
