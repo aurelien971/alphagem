@@ -24,7 +24,7 @@ export default function AboutPage() {
 
           <div className="w-full">
             <div className="mx-auto max-w-6xl pb-28 pt-16 md:pt-20">
-              <div className="space-y-16">
+              <div className="space-y-8">
                 <AboutSection />
                 <div className="h-px w-full bg-[var(--border)]" />
 
