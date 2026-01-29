@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Deal } from "./portfolioContent";
+import type { Deal } from "./useDeals";
 import DealCard from "./DealCard";
 import DealCardV2 from "./DealCardV2";
 import DealCardV3 from "./DealCardV3";
