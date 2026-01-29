@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useI18n } from "@/components/i18n/i18n";
+
 
 import AboutHero from "@/components/about/AboutHero";
 import SideSectionNav from "@/components/about/SideSectionNav";
@@ -11,12 +10,7 @@ import TeamSection from "@/components/about/TeamSection";
 import ValuesSection from "@/components/about/ValuesSection";
 
 export default function AboutPage() {
-  const { setPage } = useI18n();
 
-  useEffect(() => {
-    setPage("about");
-    return () => setPage(null);
-  }, [setPage]);
 
   return (
     <main className="bg-[var(--background)] text-[var(--foreground)] pb-[40vh]">

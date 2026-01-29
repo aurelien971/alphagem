@@ -1,19 +1,19 @@
 "use client";
 
 import { useEffect } from "react";
-import { useI18n } from "@/components/i18n/i18n";
-
 import ServicesHero from "@/components/services/ServicesHero";
 import ServicesIntro from "@/components/services/ServicesIntro";
 import ServicesSection from "@/components/services/ServicesSection";
 import ServicesSideNav from "@/components/services/ServicesSideNav";
 import { SERVICES_SECTIONS } from "@/components/services/servicesContent";
+import { useI18n } from "@/components/i18n/i18n";
 
 export default function ServicesPage() {
   const { setPage } = useI18n();
 
   useEffect(() => {
     setPage("services");
+    return () => setPage(null);
   }, [setPage]);
 
   return (

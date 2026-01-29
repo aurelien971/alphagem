@@ -14,7 +14,6 @@ type Dict = Record<string, string>;
 type I18nCtx = {
   locale: Locale;
   setLocale: (l: Locale) => void;
-  setPage: (p: string | null) => void;
   t: (key: string) => string;
   isLoading: boolean;
 };
@@ -23,10 +22,19 @@ const I18nContext = createContext<I18nCtx | null>(null);
 
 async function fetchDict(page: string, locale: Locale): Promise<Dict> {
   const res = await fetch(`/api/i18n/${page}/${locale}`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed ${page}/${locale}`);
+  if (!res.ok) throw new Error(page);
   const json = await res.json();
   return json?.strings ?? {};
 }
+
+const PAGES = [
+  "copy",
+  "home",
+  "about",
+  "services",
+  "portfolio",
+  "contact",
+];
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(() => {
@@ -34,27 +42,22 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     return window.localStorage.getItem("locale") === "fr" ? "fr" : "en";
   });
 
-  const [page, setPage] = useState<string | null>(null);
   const [dict, setDict] = useState<Dict>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
 
-    const requests = [
-      fetchDict("copy", locale),
-      fetchDict("home", locale),
-    ];
-
-    if (page) requests.push(fetchDict(page, locale));
-
-    Promise.all(requests)
+    Promise.all(PAGES.map((p) => fetchDict(p, locale)))
       .then((results) => {
         setDict(Object.assign({}, ...results));
       })
-      .catch(() => setDict({}))
+      .catch((e) => {
+        console.error("i18n load failed", e);
+        setDict({});
+      })
       .finally(() => setIsLoading(false));
-  }, [locale, page]);
+  }, [locale]);
 
   const value = useMemo<I18nCtx>(() => {
     return {
@@ -63,7 +66,6 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         setLocaleState(l);
         window.localStorage.setItem("locale", l);
       },
-      setPage,
       t: (key) => dict[key] ?? key,
       isLoading,
     };

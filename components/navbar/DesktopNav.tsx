@@ -32,35 +32,33 @@ export default function DesktopNav({
           {t("nav.about")}
         </Link>
 
-        {/* hover buffer */}
         <div className="absolute left-0 top-full h-4 w-44" />
 
-        {/* dropdown aligned to About (left edge) */}
         <div className="pointer-events-none absolute left-0 top-full z-50 mt-3 w-[240px] translate-y-1 opacity-0 transition-all duration-150 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
           <div className={dropdownShell}>
             <Link
               href="/about#about"
               className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
             >
-              {t("nav.about.about")}
+              {t("about.nav.about")}
             </Link>
             <Link
               href="/about#figures"
               className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
             >
-              {t("nav.about.figures")}
+              {t("about.nav.figures")}
             </Link>
             <Link
               href="/about#team"
               className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
             >
-              {t("nav.about.team")}
+              {t("about.nav.team")}
             </Link>
             <Link
               href="/about#values"
               className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
             >
-              {t("nav.about.values")}
+              {t("about.nav.values")}
             </Link>
           </div>
         </div>
@@ -72,10 +70,8 @@ export default function DesktopNav({
           {t("nav.services")}
         </Link>
 
-        {/* hover buffer */}
         <div className="absolute left-0 top-full h-4 w-44" />
 
-        {/* dropdown aligned to Services (left edge) */}
         <div className="pointer-events-none absolute left-0 top-full z-50 mt-3 w-[260px] translate-y-1 opacity-0 transition-all duration-150 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
           <div className={dropdownShell}>
             <Link
