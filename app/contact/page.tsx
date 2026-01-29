@@ -6,12 +6,12 @@ import { useI18n } from "@/components/i18n/i18n";
 type Status = "idle" | "sending" | "sent" | "error";
 
 export default function ContactPage() {
-  const { t, setPage } = useI18n();
+const { t } = useI18n();
   const [status, setStatus] = useState<Status>("idle");
 
-  useEffect(() => {
-    setPage("contact");
-  }, [setPage]);
+  // useEffect(() => {
+  //   setPage("contact");
+  // }, [setPage]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
