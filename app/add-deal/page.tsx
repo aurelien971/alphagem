@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
+ 
 type L10n = { en: string; fr: string };
 
 const ADMIN_PASSWORD = "alphagem121";
