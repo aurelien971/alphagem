@@ -17,11 +17,9 @@ export default function AboutHero() {
         sizes="100vw"
       />
 
-      {/* Match ServicesHero overlay style */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />
 
       <div className="relative mx-auto flex h-full max-w-[1400px] items-end px-4 pb-16 pt-28 md:pb-20">
-        {/* Match About page layout: sidebar width (w-56 = 14rem) + gap-10 */}
         <div className="grid w-full items-end lg:grid-cols-[14rem_1fr] lg:gap-10">
           <div className="hidden lg:block" />
 

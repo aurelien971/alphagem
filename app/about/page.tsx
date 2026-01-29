@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect } from "react";
+import { useI18n } from "@/components/i18n/i18n";
+
 import AboutHero from "@/components/about/AboutHero";
 import SideSectionNav from "@/components/about/SideSectionNav";
 import AboutSection from "@/components/about/AboutSection";
@@ -6,12 +11,17 @@ import TeamSection from "@/components/about/TeamSection";
 import ValuesSection from "@/components/about/ValuesSection";
 
 export default function AboutPage() {
+  const { setPage } = useI18n();
+
+  useEffect(() => {
+    setPage("about");
+    return () => setPage(null);
+  }, [setPage]);
+
   return (
     <main className="bg-[var(--background)] text-[var(--foreground)] pb-[40vh]">
-      {/* Full-bleed hero like Services */}
       <AboutHero />
 
-      {/* Constrained content */}
       <section className="bg-[var(--background)] text-[var(--foreground)]">
         <div className="relative mx-auto flex max-w-[1400px] gap-10 px-4">
           <aside className="hidden w-56 shrink-0 lg:block">
@@ -32,6 +42,7 @@ export default function AboutPage() {
                 <div className="h-px w-full bg-[var(--border)]" />
 
                 <TeamSection />
+                <div className="h-px w-full bg-[var(--border)]" />
 
                 <ValuesSection />
               </div>

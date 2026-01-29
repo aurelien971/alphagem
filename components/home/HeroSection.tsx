@@ -22,7 +22,7 @@ function ChevronDown({ className = "" }: { className?: string }) {
 }
 
 export default function HeroSection() {
-  const { t } = useI18n();
+  const { t, isLoading } = useI18n();
 
   return (
     <section className="relative h-dvh w-full overflow-hidden">
@@ -32,8 +32,8 @@ export default function HeroSection() {
       <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-10 pt-24 sm:pb-14 sm:pt-28">
         <div className="w-full [text-shadow:0_2px_14px_rgba(0,0,0,0.55)]">
           <p className="text-[11px] tracking-[0.26em] text-white/75 sm:text-xs">
-            {t("home.hero.kicker")}
-          </p>
+  {isLoading ? "LOADING…" : t("home.hero.kicker")}
+</p>
 
           <h1 className="mt-3 text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:mt-4 sm:text-5xl md:text-6xl">
             {t("home.hero.brand")}
