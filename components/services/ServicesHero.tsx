@@ -1,15 +1,41 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useI18n } from "@/components/i18n/i18n";
+
+type AssetsDoc = {
+  servicesHeroUrl?: string;
+};
 
 export default function ServicesHero() {
   const { t } = useI18n();
+  const [bgSrc, setBgSrc] = useState<string>("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/assets", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled) return;
+        const url = String((json as AssetsDoc | null)?.servicesHeroUrl ?? "");
+        setBgSrc(url);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setBgSrc("");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <section className="relative h-[72vh] min-h-[560px] w-full overflow-hidden">
       <Image
-        src="/services-hero.jpg"
+        src={bgSrc || "/services-hero.jpg"}
         alt="Services"
         fill
         priority
@@ -25,9 +51,7 @@ export default function ServicesHero() {
 
           <div className="w-full">
             <div className="max-w-6xl [text-shadow:0_2px_14px_rgba(0,0,0,0.55)]">
-              <p className="text-xs tracking-[0.26em] text-white/70">
-                {t("services.hero.kicker")}
-              </p>
+              <p className="text-xs tracking-[0.26em] text-white/70">{t("services.hero.kicker")}</p>
 
               <h1 className="mt-4 max-w-[28ch] text-4xl font-semibold leading-[1.03] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
                 {t("services.hero.title")}

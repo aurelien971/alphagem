@@ -2,6 +2,11 @@
 
 import Image from "next/image";
 import { useI18n } from "@/components/i18n/i18n";
+import { useEffect, useState } from "react";
+
+type AssetsDoc = {
+  homeVisionUrl?: string;
+};
 
 function FrostedPanel({ children }: { children: React.ReactNode }) {
   return (
@@ -35,6 +40,27 @@ function HexIcon() {
 
 export default function VisionRoleSection() {
   const { t } = useI18n();
+  const [visionSrc, setVisionSrc] = useState<string>("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/assets", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled) return;
+        const url = String((json as AssetsDoc | null)?.homeVisionUrl ?? "");
+        setVisionSrc(url);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setVisionSrc("");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const roleItems = [
     t("home.role.items.0"),
@@ -64,8 +90,16 @@ export default function VisionRoleSection() {
   return (
     <section id="vision" className="relative w-full overflow-hidden">
       <div className="relative min-h-[88vh] w-full">
-        <Image src="/hero-vision2.jpg" alt="" fill className="object-cover" />
-<div className="absolute inset-0 bg-black/15" />
+        <Image
+          src={visionSrc || "/hero-vision2.jpg"}
+          alt=""
+          fill
+          className="object-cover"
+          priority={false}
+        />
+
+        <div className="absolute inset-0 bg-black/15" />
+
         <div className="relative mx-auto flex min-h-[88vh] max-w-[1400px] items-center px-4 py-14 md:py-20">
           <div className="grid w-full items-stretch gap-6 lg:grid-cols-2 lg:gap-8">
             <FrostedPanel>

@@ -1,7 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useI18n } from "@/components/i18n/i18n";
+
+type AssetsDoc = {
+  hariUrl?: string;
+  mattiUrl?: string;
+  brunoUrl?: string;
+  guillaumeUrl?: string;
+};
 
 function TeamCard({
   name,
@@ -54,34 +62,52 @@ function TeamCard({
 
 export default function TeamSection() {
   const { t } = useI18n();
+  const [assets, setAssets] = useState<AssetsDoc | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/assets", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (!cancelled) setAssets(json as AssetsDoc);
+      })
+      .catch(() => {
+        if (!cancelled) setAssets(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const team = [
     {
       name: t("about.team.members.0.name"),
       role: t("about.team.members.0.role"),
       bio: t("about.team.members.0.bio"),
-      image: "/team/hari-krishnan2.jpg",
+      image: assets?.hariUrl || "/team/hari-krishnan2.jpg",
       linkedin: "https://www.linkedin.com/in/hari-krishnan-alphagem/",
     },
     {
       name: t("about.team.members.1.name"),
       role: t("about.team.members.1.role"),
       bio: t("about.team.members.1.bio"),
-      image: "/team/matti-liedes2.jpg",
+      image: assets?.mattiUrl || "/team/matti-liedes2.jpg",
       linkedin: "https://www.linkedin.com/in/matti-liedes-alphagem/",
     },
     {
       name: t("about.team.members.2.name"),
       role: t("about.team.members.2.role"),
       bio: t("about.team.members.2.bio"),
-      image: "/team/bruno-renard2.jpg",
+      image: assets?.brunoUrl || "/team/bruno-renard2.jpg",
       linkedin: "https://www.linkedin.com/in/bruno-renard-alphagem/",
     },
     {
       name: t("about.team.members.3.name"),
       role: t("about.team.members.3.role"),
       bio: t("about.team.members.3.bio"),
-      image: "/team/guillaume-nicolle2.jpg",
+      image: assets?.guillaumeUrl || "/team/guillaume-nicolle2.jpg",
       linkedin: "https://www.linkedin.com/in/guillaume-nicolle-4aa57113/",
     },
   ];
