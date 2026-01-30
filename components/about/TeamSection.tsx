@@ -28,9 +28,9 @@ function TeamCard({
     <div className="group relative h-full rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 transition hover:bg-[var(--surface2)]">
       <div className="flex items-start justify-between gap-6">
         <div className="flex items-center gap-5">
-          <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface2)]">
-            <Image src={image} alt={name} fill className="object-cover" />
-          </div>
+      <div className="relative h-27 w-27 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface2)]">
+  <Image src={image} alt={name} fill className="object-cover" />
+</div>
 
           <div>
             <p className="text-lg font-semibold leading-tight text-[var(--foreground)]">
