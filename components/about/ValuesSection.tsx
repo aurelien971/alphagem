@@ -16,7 +16,7 @@ export default function ValuesSection() {
           {t("about.values.title")}
         </h2>
 
-        <div className="mt-8 max-w-[85ch] space-y-6 text-base leading-8 text-[var(--muted)]">
+        <div className="mt-8 space-y-6 text-base leading-8 text-[var(--muted)]">
           <p>{t("about.values.p1")}</p>
           <p>{t("about.values.p2")}</p>
           <p>{t("about.values.p3")}</p>

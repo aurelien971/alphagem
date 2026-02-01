@@ -57,9 +57,7 @@ export default function ServicesHero() {
                 {t("services.hero.title")}
               </h1>
 
-              <p className="mt-6 max-w-[78ch] text-sm leading-7 text-white/80 md:text-base md:leading-8">
-                {t("services.hero.body")}
-              </p>
+            
             </div>
           </div>
         </div>

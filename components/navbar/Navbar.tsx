@@ -23,18 +23,6 @@ function resolveTheme(mode: Mode): Resolved {
     : "light";
 }
 
-/**
- * FILE: components/navbar/Navbar.tsx (or wherever this file lives)
- * This file only passes styling tokens to DesktopNav.
- * Dropdown alignment + UI improvements are controlled by:
- *  - dropdownShell (panel style)
- *  - DesktopNav component (positioning)
- *
- * I’m updating dropdownShell to a clean, solid panel.
- * Make sure you also apply the DesktopNav changes I give you next,
- * because alignment is done in DesktopNav.
- */
-
 export default function Navbar() {
   const pathname = usePathname();
   const [mode, setMode] = useState<Mode>("system");
@@ -43,6 +31,8 @@ export default function Navbar() {
 
   const { locale, setLocale, t } = useI18n();
 
+  // Keep this if you still want the theme toggles to work,
+  // but the NAVBAR STYLE is now forced to "About-style" everywhere.
   const isLightNavPage = useMemo(() => {
     return (
       pathname.startsWith("/about") ||
@@ -105,28 +95,22 @@ export default function Navbar() {
     window.__setThemeMode?.(m);
   };
 
-  const lightNav = isLightNavPage && resolved === "light";
+  // Previously you were switching navbar styling based on page + theme.
+  // You asked to stamp the About-style navbar everywhere:
+  // solid white bar, blue logo, gray idle links, blue hover, blue active.
+  // So we force these values now.
+  const lightNav = true;
 
-  const shellClass = lightNav
-    ? "bg-white/70 backdrop-blur-xl border-b border-black/10"
-    : "bg-white/02 backdrop-blur-xl border-b border-white/15";
+  const shellClass = "bg-white/65 backdrop-blur-xl border-b border-black/10";
 
-  const linkBase = "text-sm tracking-wide transition-colors hover:text-[#2A6E9F]";
-  const linkActive = lightNav ? "text-black/85" : "text-white/95";
-  const linkIdle = lightNav ? "text-black/45" : "text-white/40";
+  const linkBase = "text-sm tracking-wide transition-colors";
+  const linkActive = "text-[#0E3453]";
+  const linkIdle = "text-black/55 hover:text-[#0E3453]";
 
-  const pillWrap = lightNav
-    ? "border border-black/10 bg-black/[0.03]"
-    : "border border-white/25 bg-white/10";
-
-  const pillIdle = lightNav
-    ? "text-black/65 hover:bg-black/[0.06]"
-    : "text-white/75 hover:bg-white/15";
-
+  const pillWrap = "border border-black/10 bg-black/[0.03]";
+  const pillIdle = "text-black/65 hover:bg-black/[0.06]";
   const pillActive = "bg-white/85 text-black shadow-sm";
 
-  // CLEAN DROPDOWN PANEL (no blur, no milky opacity, better border + shadow)
-  // Alignment is controlled inside DesktopNav (positioning classes), not here.
   const dropdownShell =
     "rounded-xl border border-black/10 bg-white p-2 shadow-[0_18px_50px_rgba(0,0,0,0.18)]";
 
@@ -135,29 +119,23 @@ export default function Navbar() {
   const segBtn = "h-8 w-9 sm:w-8";
   const segTextBtn = "h-8 px-3 text-xs tracking-wide";
 
-  const mobileHeaderText = lightNav ? "text-black/85" : "text-white/90";
+  const mobileHeaderText = "text-black/85";
 
-  const overlayShell = lightNav ? "bg-white/85 text-black" : "bg-black/70 text-white";
+  const overlayShell = "bg-white/92 text-black";
   const overlayCard = "border border-transparent bg-transparent";
 
-  const overlayLinkIdle = lightNav ? "text-black/70" : "text-white/80";
-  const overlayLinkActive = lightNav ? "text-black" : "text-white";
+  const overlayLinkIdle = "text-black/70";
+  const overlayLinkActive = "text-black";
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div className={shellClass}>
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          {/* Desktop logo */}
+          {/* Desktop logo (FORCED BLUE WORDMARK EVERYWHERE) */}
           <div className="hidden md:block">
             <Link href="/" className="flex items-center">
               <Image
-                src={
-                  pathname === "/" || pathname.startsWith("/services")
-                    ? "/logowhite.png"
-                    : lightNav
-                      ? "/wordmark.png"
-                      : "/logowhite.png"
-                }
+                src="/wordmark.png"
                 alt="Alphagem"
                 width={120}
                 height={28}
@@ -185,7 +163,7 @@ export default function Navbar() {
             dropdownShell={dropdownShell}
           />
 
-          {/* Desktop controls */}
+          {/* Desktop controls (theme toggles still work) */}
           <DesktopControls
             mode={mode}
             setTheme={setTheme}

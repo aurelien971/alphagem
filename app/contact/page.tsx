@@ -62,13 +62,13 @@ const { t } = useI18n();
             {t("contact.eyebrow")}
           </p>
 
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.03] tracking-tight md:text-6xl">
+          {/* <h1 className="mt-4 text-4xl font-semibold leading-[1.03] tracking-tight md:text-6xl">
             {t("contact.title")}
           </h1>
 
           <p className="mt-6 max-w-[80ch] text-sm leading-7 opacity-75 md:text-base md:leading-8">
             {t("contact.body")}
-          </p>
+          </p> */}
         </div>
 
         <div className="mt-12 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" />
@@ -87,7 +87,7 @@ const { t } = useI18n();
 
               <div
                 className={[
-                  "rounded-full border px-3 py-1 text-xs tracking-wide",
+                  "rounded-full border px-3 py-1 text-s tracking-wide",
                   status === "sent"
                     ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
                     : status === "error"
@@ -128,7 +128,7 @@ const { t } = useI18n();
               />
 
               <div className="flex flex-col-reverse gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs leading-6 opacity-60">
+                <p className="text-s leading-6 opacity-60">
                   {t("contact.consent")}
                 </p>
 
@@ -186,11 +186,11 @@ const { t } = useI18n();
                 />
               </div>
 
-              <div className="mt-7 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" />
-
+              {/* <div className="mt-7 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" /> */}
+{/* 
               <p className="mt-7 text-sm leading-7 opacity-75">
                 {t("contact.direct.brief")}
-              </p>
+              </p> */}
             </div>
 
             <div className="rounded-[28px] border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_3%,transparent)] p-6 md:p-8">

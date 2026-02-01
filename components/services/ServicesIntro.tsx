@@ -6,13 +6,13 @@ export default function ServicesIntro() {
 
   return (
     <div id="services" className="scroll-mt-28">
-      <p className="text-xs tracking-[0.26em] opacity-60">{t("services.overviewEyebrow")}</p>
-      <h2 className="mt-4 text-3xl font-semibold leading-tight md:text-5xl">
-        {t("services.overviewTitle")}
-      </h2>
-      <p className="mt-6 max-w-[90ch] text-sm leading-7 opacity-75 md:text-base md:leading-8">
-        {t("services.overviewBody")}
-      </p>
+
+     <h3 className="text-2xl font-semibold leading-tight text-[var(--foreground)] md:text-4xl">
+  {t("services.overviewTitle")}
+</h3>
+   <p className="mt-6 w-full text-sm leading-7 opacity-75 md:text-base md:leading-8">
+  {t("services.overviewBody")}
+</p>
     </div>
   );
 }

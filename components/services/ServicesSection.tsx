@@ -36,7 +36,7 @@ export default function ServicesSection({
       <div className="border-t border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] pt-10">
         <p className="text-xs tracking-[0.26em] opacity-60">{t(eyebrowKey)}</p>
 
-        <div className="mt-4 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
+        <div className="mt-16 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
           <div>
             <h3 className="text-2xl font-semibold leading-tight md:text-4xl">
               {t(titleKey)}
@@ -89,9 +89,7 @@ export default function ServicesSection({
                 )}
               </div>
 
-              <div className="mt-8 border-t border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] pt-6 text-sm leading-7 opacity-70">
-                {t("services.delivered")}
-              </div>
+              
             </div>
           </div>
         </div>

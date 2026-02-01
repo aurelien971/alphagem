@@ -13,14 +13,16 @@ export default function ServicesPage() {
 
       <section className="bg-[var(--background)] text-[var(--foreground)]">
         <div className="relative mx-auto flex max-w-[1400px] gap-16 px-4">
+          {/* SIDE NAV */}
           <aside className="hidden w-60 shrink-0 lg:block">
             <div className="sticky top-24 h-[calc(100vh-6rem)]">
-              <div className="flex h-full items-center">
+              <div className="flex h-full items-start pt-16 md:pt-25">
                 <ServicesSideNav />
               </div>
             </div>
           </aside>
 
+          {/* MAIN CONTENT */}
           <div className="w-full">
             <div className="mx-auto max-w-6xl pb-28 pt-16 md:pt-20">
               <section id="overview" className="scroll-mt-28 pb-2">

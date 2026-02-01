@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import AboutHero from "@/components/about/AboutHero";
 import SideSectionNav from "@/components/about/SideSectionNav";
 import AboutSection from "@/components/about/AboutSection";
@@ -10,22 +8,22 @@ import TeamSection from "@/components/about/TeamSection";
 import ValuesSection from "@/components/about/ValuesSection";
 
 export default function AboutPage() {
-
-
   return (
     <main className="bg-[var(--background)] text-[var(--foreground)] pb-[40vh]">
       <AboutHero />
 
       <section className="bg-[var(--background)] text-[var(--foreground)]">
         <div className="relative mx-auto flex max-w-[1400px] gap-10 px-4">
+          {/* SIDE NAV */}
           <aside className="hidden w-56 shrink-0 lg:block">
             <div className="sticky top-24 h-[calc(100vh-6rem)]">
-              <div className="flex h-full items-center">
+              <div className="flex h-full items-start pt-16 md:pt-25">
                 <SideSectionNav />
               </div>
             </div>
           </aside>
 
+          {/* MAIN CONTENT */}
           <div className="w-full">
             <div className="mx-auto max-w-6xl pb-28 pt-16 md:pt-20">
               <div className="space-y-8">

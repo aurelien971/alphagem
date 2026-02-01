@@ -28,14 +28,12 @@ function TeamCard({
     <div className="group relative h-full rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 transition hover:bg-[var(--surface2)]">
       <div className="flex items-start justify-between gap-6">
         <div className="flex items-center gap-5">
-      <div className="relative h-27 w-27 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface2)]">
-  <Image src={image} alt={name} fill className="object-cover" />
-</div>
+          <div className="relative h-28 w-28 overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface2)]">
+            <Image src={image} alt={name} fill className="object-cover" sizes="112px" />
+          </div>
 
           <div>
-            <p className="text-lg font-semibold leading-tight text-[var(--foreground)]">
-              {name}
-            </p>
+            <p className="text-lg font-semibold leading-tight text-[var(--foreground)]">{name}</p>
             <p className="mt-1 text-sm text-[var(--muted)]">{role}</p>
           </div>
         </div>
@@ -112,6 +110,8 @@ export default function TeamSection() {
     },
   ];
 
+  const teamBody = t("about.team.body");
+
   return (
     <section id="team" className="scroll-mt-28">
       <p className="text-xs tracking-[0.28em] text-[var(--muted2)] uppercase">
@@ -121,6 +121,14 @@ export default function TeamSection() {
       <h2 className="mt-5 text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
         {t("about.team.title")}
       </h2>
+
+      {teamBody ? (
+       <div className="mt-4 max-w-none">
+  <p className="max-w-full text-sm leading-7 text-[var(--muted)] md:text-base md:leading-8">
+    {teamBody}
+  </p>
+</div>
+      ) : null}
 
       <div className="mt-10 grid gap-6 md:grid-cols-2 md:gap-8">
         {team.map((m) => (

@@ -27,7 +27,7 @@ function ChevronDown({ className = "" }: { className?: string }) {
 }
 
 export default function HeroSection() {
-  const { t, isLoading } = useI18n();
+  const { t } = useI18n();
   const [heroSrc, setHeroSrc] = useState<string>("");
 
   useEffect(() => {
@@ -37,12 +37,10 @@ export default function HeroSection() {
       .then((r) => (r.ok ? r.json() : null))
       .then((json) => {
         if (cancelled) return;
-        const url = String((json as AssetsDoc | null)?.homeBackgroundUrl ?? "");
-        setHeroSrc(url);
+        setHeroSrc(String((json as AssetsDoc | null)?.homeBackgroundUrl ?? ""));
       })
       .catch(() => {
-        if (cancelled) return;
-        setHeroSrc("");
+        if (!cancelled) setHeroSrc("");
       });
 
     return () => {
@@ -60,47 +58,39 @@ export default function HeroSection() {
         className="object-cover"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/30 to-black/45" />
 
-      <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-10 pt-24 sm:pb-14 sm:pt-28">
-        <div className="w-full [text-shadow:0_2px_14px_rgba(0,0,0,0.55)]">
-          <p className="text-[11px] tracking-[0.26em] text-white/75 sm:text-xs">
-            {isLoading ? "LOADING…" : t("home.hero.kicker")}
-          </p>
-
-          <h1 className="mt-3 text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:mt-4 sm:text-5xl md:text-6xl">
-            {t("home.hero.brand")}
-          </h1>
-
-          <div className="mt-7 grid gap-7 md:mt-10 md:grid-cols-[1fr_auto_1fr] md:gap-10">
+      <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-12 pt-28 sm:pb-16 sm:pt-32">
+        <div className="w-full [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
+          <div className="mt-10 grid gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-14">
             <div>
-              <h2 className="text-sm font-semibold tracking-wide text-white sm:text-base">
+              <h2 className="text-base font-semibold tracking-wide text-white sm:text-lg">
                 {t("home.hero.leftTitle")}
               </h2>
-              <p className="mt-3 max-w-prose text-sm leading-6 text-white/80 sm:mt-4 sm:text-[15px] sm:leading-7">
+              <p className="mt-4 max-w-prose text-base leading-8 text-white/85 sm:text-lg sm:leading-8">
                 {t("home.hero.leftBody")}
               </p>
             </div>
 
-            <div className="hidden w-px bg-white/20 md:block" />
+            <div className="hidden w-px bg-white/25 md:block" />
 
             <div>
-              <h2 className="text-sm font-semibold tracking-wide text-white sm:text-base">
+              <h2 className="text-base font-semibold tracking-wide text-white sm:text-lg">
                 {t("home.hero.rightTitle")}
               </h2>
-              <p className="mt-3 max-w-prose text-sm leading-6 text-white/80 sm:mt-4 sm:text-[15px] sm:leading-7">
+              <p className="mt-4 max-w-prose text-base leading-8 text-white/85 sm:text-lg sm:leading-8">
                 {t("home.hero.rightBody")}
               </p>
             </div>
           </div>
 
-          <div className="mt-7 sm:mt-9">
+          <div className="mt-10">
             <LearnMoreButton
               targetId="vision"
-              className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-xs font-semibold text-black shadow-sm hover:bg-white"
+              className="inline-flex items-center gap-2 rounded-full bg-white/90 px-6 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-white"
             >
               {t("home.hero.cta")}
-              <ChevronDown className="h-3.5 w-3.5" />
+              <ChevronDown className="h-4 w-4" />
             </LearnMoreButton>
           </div>
         </div>

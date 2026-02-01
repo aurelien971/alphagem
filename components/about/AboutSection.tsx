@@ -15,7 +15,7 @@ export default function AboutSection() {
         {t("about.section.title")}
       </h2>
 
-      <div className="mt-8 max-w-[78ch] space-y-6 text-base leading-8 text-[var(--muted)]">
+      <div className="mt-8 space-y-6 text-base leading-8 text-[var(--muted)]">
         <p>{t("about.section.p1")}</p>
         <p>{t("about.section.p2")}</p>
       </div>

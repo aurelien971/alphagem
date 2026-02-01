@@ -20,15 +20,10 @@ export default function MobileTopbar({
       <div className="relative flex items-center justify-between">
         <div className="w-10" />
 
+        {/* ALWAYS BLUE LOGO */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Image
-            src={
-              pathname === "/" || pathname.startsWith("/services")
-                ? "/logowhite.png"
-                : lightNav
-                  ? "/wordmark.png"
-                  : "/logowhite.png"
-            }
+            src="/wordmark.png"
             alt="Alphagem"
             width={120}
             height={28}
