@@ -17,9 +17,9 @@ export default function PortfolioPage() {
           {t("portfolio.title")}
         </h1>
 
-        <p className="mt-6 max-w-[90ch] text-sm leading-7 opacity-75 md:text-base md:leading-8">
+        {/* <p className="mt-6 max-w-[90ch] text-sm leading-7 opacity-75 md:text-base md:leading-8">
           {t("portfolio.body")}
-        </p>
+        </p> */}
 
         <div className="mt-12 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)]" />
 

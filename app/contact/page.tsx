@@ -58,9 +58,9 @@ const { t } = useI18n();
     <main className="min-h-dvh bg-[var(--background)] text-[var(--foreground)]">
       <section className="mx-auto max-w-6xl px-4 pb-24 pt-28 md:pt-32">
         <div className="max-w-3xl">
-          <p className="text-xs tracking-[0.26em] opacity-60">
+          {/* <p className="text-xs tracking-[0.26em] opacity-60">
             {t("contact.eyebrow")}
-          </p>
+          </p> */}
 
           {/* <h1 className="mt-4 text-4xl font-semibold leading-[1.03] tracking-tight md:text-6xl">
             {t("contact.title")}
@@ -71,7 +71,7 @@ const { t } = useI18n();
           </p> */}
         </div>
 
-        <div className="mt-12 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" />
+        {/* <div className="mt-12 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" /> */}
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
           <div className="rounded-[28px] border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_3%,transparent)] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] md:p-10">

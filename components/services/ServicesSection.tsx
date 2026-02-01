@@ -48,11 +48,13 @@ export default function ServicesSection({
 
             <div className="mt-8">
               <ul className="space-y-4 text-sm leading-7 opacity-80 md:text-base md:leading-8">
-                {bulletKeys.map((k) => (
-                  <li key={k} className="flex gap-3">
-                    <span className="mt-[0.55rem] inline-flex h-6 w-6 items-center justify-center rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_6%,transparent)]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--foreground)] opacity-60" />
-                    </span>
+                {bulletKeys.map((k, index) => (
+                  <li key={k} className={index === 3 ? "" : "flex gap-3"}>
+                    {index !== 3 && (
+                      <span className="mt-[0.55rem] inline-flex h-6 w-6 items-center justify-center rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_6%,transparent)]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--foreground)] opacity-60" />
+                      </span>
+                    )}
                     <span>{t(k)}</span>
                   </li>
                 ))}
@@ -68,7 +70,9 @@ export default function ServicesSection({
 
           <div className="lg:pt-1">
             <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_4%,transparent)] p-7">
-              <p className="text-xs tracking-[0.26em] opacity-60">{t("services.focusTitle")}</p>
+              <p className="text-xs tracking-[0.26em] opacity-60">
+                {t("services.focusTitle")}
+              </p>
 
               <div className="mt-6 space-y-4">
                 {(proofKeys ?? []).map((p) => (
@@ -77,19 +81,23 @@ export default function ServicesSection({
                     className="border-t border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] pt-4 first:border-t-0 first:pt-0"
                   >
                     <div className="text-sm opacity-60">{t(p.labelKey)}</div>
-                    <div className="mt-1 text-base font-semibold">{t(p.valueKey)}</div>
+                    <div className="mt-1 text-base font-semibold">
+                      {t(p.valueKey)}
+                    </div>
                   </div>
                 ))}
 
                 {!proofKeys?.length && (
                   <div className="border-t border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] pt-4">
-                    <div className="text-sm opacity-60">{t("services.approachLabel")}</div>
-                    <div className="mt-1 text-base font-semibold">{t("services.approachValue")}</div>
+                    <div className="text-sm opacity-60">
+                      {t("services.approachLabel")}
+                    </div>
+                    <div className="mt-1 text-base font-semibold">
+                      {t("services.approachValue")}
+                    </div>
                   </div>
                 )}
               </div>
-
-              
             </div>
           </div>
         </div>
