@@ -202,13 +202,13 @@ export default function AddDealPage() {
   if (!unlocked) {
     return (
       <main className="mx-auto max-w-lg px-4 pb-20 pt-28">
-        <div className="rounded-3xl border border-black/10 bg-white p-6 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+        <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[var(--background)] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
           <h1 className="text-2xl font-semibold">Add deal</h1>
           <p className="mt-2 text-sm opacity-70">Internal page.</p>
 
           <label className="mt-6 block text-sm font-medium opacity-80">Password</label>
           <input
-            className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3"
+            className="mt-2 w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3"
             type="password"
             value={pw}
             onChange={(e) => setPw(e.target.value)}
@@ -217,7 +217,7 @@ export default function AddDealPage() {
 
           <button
             type="button"
-            className="mt-4 w-full rounded-2xl border border-black/10 bg-black px-4 py-3 text-sm font-medium text-white hover:opacity-95 disabled:opacity-40"
+            className="mt-4 w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-black px-4 py-3 text-sm font-medium text-white hover:opacity-95 disabled:opacity-40"
             disabled={pw.trim() !== ADMIN_PASSWORD}
             onClick={() => setUnlocked(true)}
           >
@@ -240,7 +240,7 @@ export default function AddDealPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-20 pt-28">
-      <div className="rounded-3xl border border-black/10 bg-white p-6 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+      <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[var(--background)] p-6 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold">Add deal</h1>
@@ -252,7 +252,7 @@ export default function AddDealPage() {
           <button
             type="button"
             onClick={fillExample}
-            className="rounded-2xl border border-black/10 bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-95"
+            className="rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-black px-4 py-2 text-sm font-medium text-white hover:opacity-95"
           >
             Fill example
           </button>
@@ -262,7 +262,7 @@ export default function AddDealPage() {
           <div>
             <label className="text-sm font-medium opacity-80">ID</label>
             <input
-              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+              className="mt-2 w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
               value={id}
               onChange={(e) => {
                 setIdTouched(true);
@@ -288,7 +288,7 @@ export default function AddDealPage() {
           <div>
             <label className="text-sm font-medium opacity-80">Year</label>
             <input
-              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+              className="mt-2 w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
               value={year}
               onChange={(e) => setYear(e.target.value)}
               placeholder={`ex: ${EXAMPLE.year}`}
@@ -299,7 +299,7 @@ export default function AddDealPage() {
           <div className="md:col-span-2">
             <label className="text-sm font-medium opacity-80">Amount label</label>
             <input
-              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+              className="mt-2 w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
               value={amountLabel}
               onChange={(e) => setAmountLabel(e.target.value)}
               placeholder={`ex: ${EXAMPLE.amountLabel}`}
@@ -308,17 +308,17 @@ export default function AddDealPage() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-black/10 p-5">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
             <p className="text-sm font-medium">Program</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={program.en}
                 onChange={(e) => setProgram((p) => ({ ...p, en: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.programEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={program.fr}
                 onChange={(e) => setProgram((p) => ({ ...p, fr: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.programFr}`}
@@ -326,17 +326,17 @@ export default function AddDealPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-black/10 p-5">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
             <p className="text-sm font-medium">Counterparty</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={counterparty.en}
                 onChange={(e) => setCounterparty((p) => ({ ...p, en: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.counterpartyEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={counterparty.fr}
                 onChange={(e) => setCounterparty((p) => ({ ...p, fr: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.counterpartyFr}`}
@@ -344,17 +344,17 @@ export default function AddDealPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-black/10 p-5">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
             <p className="text-sm font-medium">Structure</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={structure.en}
                 onChange={(e) => setStructure((p) => ({ ...p, en: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.structureEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={structure.fr}
                 onChange={(e) => setStructure((p) => ({ ...p, fr: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.structureFr}`}
@@ -362,17 +362,17 @@ export default function AddDealPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-black/10 p-5">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
             <p className="text-sm font-medium">Highlight (optional)</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={highlight.en}
                 onChange={(e) => setHighlight((p) => ({ ...p, en: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.highlightEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={highlight.fr}
                 onChange={(e) => setHighlight((p) => ({ ...p, fr: e.target.value }))}
                 placeholder={`ex: ${EXAMPLE.highlightFr}`}
@@ -382,7 +382,7 @@ export default function AddDealPage() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl border border-black/10 p-5">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-medium">Logo (required)</p>
@@ -393,14 +393,14 @@ export default function AddDealPage() {
                 <button
                   type="button"
                   onClick={pickLogo}
-                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-80 hover:opacity-100"
+                  className="rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-3 py-1 text-xs opacity-80 hover:opacity-100"
                 >
                   Choose
                 </button>
                 <button
                   type="button"
                   onClick={clearLogo}
-                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-70 hover:opacity-100"
+                  className="rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-3 py-1 text-xs opacity-70 hover:opacity-100"
                 >
                   Clear
                 </button>
@@ -418,7 +418,7 @@ export default function AddDealPage() {
             <p className="mt-3 text-xs opacity-60">{logoFile ? `Selected: ${logoFile.name}` : "No file selected"}</p>
           </div>
 
-          <div className="rounded-3xl border border-black/10 p-5">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-medium">Tombstone (optional)</p>
@@ -429,14 +429,14 @@ export default function AddDealPage() {
                 <button
                   type="button"
                   onClick={pickTombstone}
-                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-80 hover:opacity-100"
+                  className="rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-3 py-1 text-xs opacity-80 hover:opacity-100"
                 >
                   Choose
                 </button>
                 <button
                   type="button"
                   onClick={clearTombstone}
-                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-70 hover:opacity-100"
+                  className="rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-3 py-1 text-xs opacity-70 hover:opacity-100"
                 >
                   Clear
                 </button>
@@ -461,7 +461,7 @@ export default function AddDealPage() {
           type="button"
           disabled={!canSubmit || busy}
           onClick={submit}
-          className="mt-8 w-full rounded-2xl border border-black/10 bg-black px-4 py-3 text-sm font-medium text-white hover:opacity-95 disabled:opacity-40"
+          className="mt-8 w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-black px-4 py-3 text-sm font-medium text-white hover:opacity-95 disabled:opacity-40"
         >
           {busy ? "Uploading..." : "Add deal"}
         </button>
@@ -482,7 +482,7 @@ export default function AddDealPage() {
         )}
 
         {debug && (
-          <details className="mt-4 rounded-2xl border border-black/10 bg-black/[0.03] p-4">
+          <details className="mt-4 rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-black/[0.03] p-4">
             <summary className="cursor-pointer text-xs font-medium opacity-70">Debug details</summary>
             <pre className="mt-3 whitespace-pre-wrap text-xs opacity-80">{debug}</pre>
           </details>
