@@ -1,23 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
- 
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
 type L10n = { en: string; fr: string };
+type MsgKind = "info" | "error" | "success";
 
 const ADMIN_PASSWORD = "alphagem121";
 
 const EXAMPLE = {
   amountLabel: "160 000 000 000 FCFA",
   year: "2024",
-  logoAlt: "BOAD",
-  programEn: "DOLI-P II program",
-  programFr: "Programme DOLI-P II",
-  counterpartyEn: "West African Development Bank",
-  counterpartyFr: "Banque Ouest Africaine de Développement",
-  structureEn: "Multi-originator securitization",
-  structureFr: "Titrisation multi-originateurs",
-  highlightEn: "First mezzanine tranche securitization in UEMOA",
-  highlightFr: "Première tranche mezzanine titrisée en UEMOA",
+  programEn: "EN - 'DOLI-P II program'",
+  programFr: "FR - 'Programme DOLI-P II'",
+  counterpartyEn: "EN - 'West African Development Bank'",
+  counterpartyFr: "FR - 'Banque Ouest Africaine de Développement'",
+  structureEn: "EN - 'Multi-originator securitization'",
+  structureFr: "FR - 'Titrisation multi-originateurs'",
+  highlightEn: "EN - 'First mezzanine tranche securitization in UEMOA'",
+  highlightFr: "FR - 'Première tranche mezzanine titrisée en UEMOA'",
   id: "boad-doli-p2-2024",
 };
 
@@ -29,14 +29,19 @@ function slugify(s: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+function safeText(v: unknown) {
+  return typeof v === "string" ? v : JSON.stringify(v);
+}
+
 export default function AddDealPage() {
   const [pw, setPw] = useState("");
   const [unlocked, setUnlocked] = useState(false);
 
   const [id, setId] = useState("");
+  const [idTouched, setIdTouched] = useState(false);
+
   const [amountLabel, setAmountLabel] = useState("");
   const [year, setYear] = useState("");
-  const [logoAlt, setLogoAlt] = useState("");
 
   const [program, setProgram] = useState<L10n>({ en: "", fr: "" });
   const [counterparty, setCounterparty] = useState<L10n>({ en: "", fr: "" });
@@ -46,8 +51,26 @@ export default function AddDealPage() {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [tombstoneFile, setTombstoneFile] = useState<File | null>(null);
 
+  const logoInputRef = useRef<HTMLInputElement | null>(null);
+  const tombstoneInputRef = useRef<HTMLInputElement | null>(null);
+
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [msg, setMsg] = useState<{ kind: MsgKind; text: string } | null>(null);
+  const [debug, setDebug] = useState<string | null>(null);
+
+  // Auto-generate ID unless user manually edited it
+  useEffect(() => {
+    if (idTouched) return;
+
+    const baseName =
+      slugify(counterparty.en || counterparty.fr || program.en || program.fr || "deal") || "deal";
+    const baseYear = slugify(year || "");
+    const base = slugify([baseName, baseYear].filter(Boolean).join("-"));
+
+    if (base && base !== id) setId(base);
+    if (!base && id) setId("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [counterparty.en, counterparty.fr, program.en, program.fr, year, idTouched]);
 
   const canSubmit = useMemo(() => {
     return (
@@ -55,44 +78,63 @@ export default function AddDealPage() {
       id.trim().length > 0 &&
       amountLabel.trim().length > 0 &&
       year.trim().length > 0 &&
-      logoAlt.trim().length > 0 &&
       program.en.trim().length > 0 &&
       program.fr.trim().length > 0 &&
       counterparty.en.trim().length > 0 &&
       counterparty.fr.trim().length > 0 &&
       structure.en.trim().length > 0 &&
       structure.fr.trim().length > 0 &&
-      logoFile != null &&
-      tombstoneFile != null
+      logoFile != null
+      // tombstone is optional
     );
-  }, [unlocked, id, amountLabel, year, logoAlt, program, counterparty, structure, logoFile, tombstoneFile]);
+  }, [unlocked, id, amountLabel, year, program, counterparty, structure, logoFile]);
 
   const fillExample = () => {
+    setMsg(null);
+    setDebug(null);
+
+    setIdTouched(false);
     setId(EXAMPLE.id);
+
     setAmountLabel(EXAMPLE.amountLabel);
     setYear(EXAMPLE.year);
-    setLogoAlt(EXAMPLE.logoAlt);
     setProgram({ en: EXAMPLE.programEn, fr: EXAMPLE.programFr });
     setCounterparty({ en: EXAMPLE.counterpartyEn, fr: EXAMPLE.counterpartyFr });
     setStructure({ en: EXAMPLE.structureEn, fr: EXAMPLE.structureFr });
     setHighlight({ en: EXAMPLE.highlightEn, fr: EXAMPLE.highlightFr });
   };
 
-  const autoId = () => {
-    const base = slugify(`${logoAlt || "deal"}-${year || ""}`);
-    if (base) setId(base);
+  const clearLogo = () => {
+    setLogoFile(null);
+    if (logoInputRef.current) logoInputRef.current.value = "";
   };
+
+  const clearTombstone = () => {
+    setTombstoneFile(null);
+    if (tombstoneInputRef.current) tombstoneInputRef.current.value = "";
+  };
+
+  const pickLogo = () => logoInputRef.current?.click();
+  const pickTombstone = () => tombstoneInputRef.current?.click();
 
   const submit = async () => {
     setMsg(null);
+    setDebug(null);
     setBusy(true);
+
+    const logoAltDerived = (counterparty.en || counterparty.fr || program.en || program.fr || "Deal")
+      .trim()
+      .slice(0, 80);
 
     try {
       const fd = new FormData();
+
       fd.set("id", id.trim());
       fd.set("amountLabel", amountLabel.trim());
       fd.set("year", year.trim());
-      fd.set("logoAlt", logoAlt.trim());
+
+      // Kept for backend compatibility, not shown to users
+      fd.set("logoAlt", logoAltDerived);
 
       fd.set("programEn", program.en.trim());
       fd.set("programFr", program.fr.trim());
@@ -115,20 +157,51 @@ export default function AddDealPage() {
         body: fd,
       });
 
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json?.error ?? `Upload failed (${res.status})`);
+      const contentType = res.headers.get("content-type") || "";
+      let json: any = null;
+      let rawText: string | null = null;
 
-      setMsg(`Uploaded: ${json?.id ?? id}`);
+      if (contentType.includes("application/json")) {
+        json = await res.json().catch(() => null);
+      } else {
+        rawText = await res.text().catch(() => null);
+      }
+
+      if (!res.ok) {
+        const err =
+          json?.error ||
+          (rawText ? rawText.slice(0, 800) : null) ||
+          `Upload failed (${res.status})`;
+
+        const dbg = [
+          `Status: ${res.status} ${res.statusText}`,
+          `Content-Type: ${contentType || "unknown"}`,
+          `Body preview: ${safeText(json ?? rawText ?? "")}`.slice(0, 1200),
+        ].join("\n");
+
+        console.error("Upload failed", { status: res.status, json, rawText });
+        setDebug(dbg);
+        throw new Error(typeof err === "string" ? err : "Upload failed");
+      }
+
+      const uploadedId = json?.id ?? id.trim();
+      setMsg({ kind: "success", text: `Uploaded: ${uploadedId}` });
+
+      clearLogo();
+      clearTombstone();
       setBusy(false);
     } catch (e: any) {
-      setMsg(e?.message ?? "Upload failed");
+      console.error("Upload exception", e);
+      setMsg({ kind: "error", text: e?.message ?? "Upload failed" });
+
+      setDebug((prev) => prev ?? `Client error: ${safeText(e?.stack || e)}`.slice(0, 1200));
       setBusy(false);
     }
   };
 
   if (!unlocked) {
     return (
-      <main className="mx-auto max-w-lg px-4 pt-28 pb-20">
+      <main className="mx-auto max-w-lg px-4 pb-20 pt-28">
         <div className="rounded-3xl border border-black/10 bg-white p-6 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
           <h1 className="text-2xl font-semibold">Add deal</h1>
           <p className="mt-2 text-sm opacity-70">Internal page.</p>
@@ -155,20 +228,24 @@ export default function AddDealPage() {
             {pw.trim() === ADMIN_PASSWORD ? "Password ok." : "Password required."}
           </p>
 
-          {msg && <p className="mt-4 text-sm opacity-80">{msg}</p>}
+          {msg && (
+            <p className={`mt-4 text-sm ${msg.kind === "error" ? "text-red-700" : "opacity-80"}`}>
+              {msg.text}
+            </p>
+          )}
         </div>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-4 pt-28 pb-20">
+    <main className="mx-auto max-w-3xl px-4 pb-20 pt-28">
       <div className="rounded-3xl border border-black/10 bg-white p-6 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold">Add deal</h1>
-            <p className="mt-2 text-sm opacity-70">
-              Upload logo + tombstone, then publish. Example values are from: {EXAMPLE.id}
+            <p className="mt-2 text-xs opacity-60">
+              Upload a logo (required) and optional tombstone, then publish. ex: {EXAMPLE.id}
             </p>
           </div>
 
@@ -185,48 +262,47 @@ export default function AddDealPage() {
           <div>
             <label className="text-sm font-medium opacity-80">ID</label>
             <input
-              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3"
+              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
               value={id}
-              onChange={(e) => setId(e.target.value)}
-              placeholder={`Example: ${EXAMPLE.id}`}
+              onChange={(e) => {
+                setIdTouched(true);
+                setId(e.target.value);
+              }}
+              placeholder={`ex: ${EXAMPLE.id}`}
             />
-            <button
-              type="button"
-              onClick={autoId}
-              className="mt-2 text-xs underline opacity-70 hover:opacity-100"
-            >
-              Auto-generate from logoAlt + year
-            </button>
+            <p className="mt-2 text-xs opacity-60">
+              Auto-generated from Counterparty + Year unless you edit it.
+              {idTouched ? " (You edited it.)" : ""}
+            </p>
+            {idTouched && (
+              <button
+                type="button"
+                onClick={() => setIdTouched(false)}
+                className="mt-2 text-xs underline opacity-70 hover:opacity-100"
+              >
+                Re-enable auto ID
+              </button>
+            )}
           </div>
 
           <div>
             <label className="text-sm font-medium opacity-80">Year</label>
             <input
-              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3"
+              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
               value={year}
               onChange={(e) => setYear(e.target.value)}
-              placeholder={`Example: ${EXAMPLE.year}`}
+              placeholder={`ex: ${EXAMPLE.year}`}
               inputMode="numeric"
             />
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <label className="text-sm font-medium opacity-80">Amount label</label>
             <input
-              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3"
+              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
               value={amountLabel}
               onChange={(e) => setAmountLabel(e.target.value)}
-              placeholder={`Example: ${EXAMPLE.amountLabel}`}
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-medium opacity-80">Logo alt</label>
-            <input
-              className="mt-2 w-full rounded-2xl border border-black/10 px-4 py-3"
-              value={logoAlt}
-              onChange={(e) => setLogoAlt(e.target.value)}
-              placeholder={`Example: ${EXAMPLE.logoAlt}`}
+              placeholder={`ex: ${EXAMPLE.amountLabel}`}
             />
           </div>
         </div>
@@ -236,16 +312,16 @@ export default function AddDealPage() {
             <p className="text-sm font-medium">Program</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={program.en}
                 onChange={(e) => setProgram((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`EN example: ${EXAMPLE.programEn}`}
+                placeholder={`ex: ${EXAMPLE.programEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={program.fr}
                 onChange={(e) => setProgram((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`FR example: ${EXAMPLE.programFr}`}
+                placeholder={`ex: ${EXAMPLE.programFr}`}
               />
             </div>
           </div>
@@ -254,16 +330,16 @@ export default function AddDealPage() {
             <p className="text-sm font-medium">Counterparty</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={counterparty.en}
                 onChange={(e) => setCounterparty((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`EN example: ${EXAMPLE.counterpartyEn}`}
+                placeholder={`ex: ${EXAMPLE.counterpartyEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={counterparty.fr}
                 onChange={(e) => setCounterparty((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`FR example: ${EXAMPLE.counterpartyFr}`}
+                placeholder={`ex: ${EXAMPLE.counterpartyFr}`}
               />
             </div>
           </div>
@@ -272,16 +348,16 @@ export default function AddDealPage() {
             <p className="text-sm font-medium">Structure</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={structure.en}
                 onChange={(e) => setStructure((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`EN example: ${EXAMPLE.structureEn}`}
+                placeholder={`ex: ${EXAMPLE.structureEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={structure.fr}
                 onChange={(e) => setStructure((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`FR example: ${EXAMPLE.structureFr}`}
+                placeholder={`ex: ${EXAMPLE.structureFr}`}
               />
             </div>
           </div>
@@ -290,16 +366,16 @@ export default function AddDealPage() {
             <p className="text-sm font-medium">Highlight (optional)</p>
             <div className="mt-3 grid gap-3">
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={highlight.en}
                 onChange={(e) => setHighlight((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`EN example: ${EXAMPLE.highlightEn}`}
+                placeholder={`ex: ${EXAMPLE.highlightEn}`}
               />
               <input
-                className="w-full rounded-2xl border border-black/10 px-4 py-3"
+                className="w-full rounded-2xl border border-black/10 px-4 py-3 text-sm placeholder:text-xs"
                 value={highlight.fr}
                 onChange={(e) => setHighlight((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`FR example: ${EXAMPLE.highlightFr}`}
+                placeholder={`ex: ${EXAMPLE.highlightFr}`}
               />
             </div>
           </div>
@@ -307,27 +383,75 @@ export default function AddDealPage() {
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           <div className="rounded-3xl border border-black/10 p-5">
-            <p className="text-sm font-medium">Logo (required)</p>
-            <p className="mt-1 text-xs opacity-60">PNG recommended.</p>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium">Logo (required)</p>
+                <p className="mt-1 text-xs opacity-60">PNG recommended.</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={pickLogo}
+                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-80 hover:opacity-100"
+                >
+                  Choose
+                </button>
+                <button
+                  type="button"
+                  onClick={clearLogo}
+                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-70 hover:opacity-100"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+
             <input
-              className="mt-4 block w-full text-sm"
+              ref={logoInputRef}
+              className="hidden"
               type="file"
               accept="image/*"
               onChange={(e) => setLogoFile(e.target.files?.[0] ?? null)}
             />
-            <p className="mt-2 text-xs opacity-60">{logoFile ? `Selected: ${logoFile.name}` : "No file selected"}</p>
+
+            <p className="mt-3 text-xs opacity-60">{logoFile ? `Selected: ${logoFile.name}` : "No file selected"}</p>
           </div>
 
           <div className="rounded-3xl border border-black/10 p-5">
-            <p className="text-sm font-medium">Tombstone (required)</p>
-            <p className="mt-1 text-xs opacity-60">PNG recommended.</p>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium">Tombstone (optional)</p>
+                <p className="mt-1 text-xs opacity-60">PNG recommended.</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={pickTombstone}
+                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-80 hover:opacity-100"
+                >
+                  Choose
+                </button>
+                <button
+                  type="button"
+                  onClick={clearTombstone}
+                  className="rounded-full border border-black/10 px-3 py-1 text-xs opacity-70 hover:opacity-100"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+
             <input
-              className="mt-4 block w-full text-sm"
+              ref={tombstoneInputRef}
+              className="hidden"
               type="file"
               accept="image/*"
               onChange={(e) => setTombstoneFile(e.target.files?.[0] ?? null)}
             />
-            <p className="mt-2 text-xs opacity-60">
+
+            <p className="mt-3 text-xs opacity-60">
               {tombstoneFile ? `Selected: ${tombstoneFile.name}` : "No file selected"}
             </p>
           </div>
@@ -342,7 +466,27 @@ export default function AddDealPage() {
           {busy ? "Uploading..." : "Add deal"}
         </button>
 
-        {msg && <p className="mt-4 text-sm opacity-80">{msg}</p>}
+        {msg && (
+          <p
+            className={[
+              "mt-4 whitespace-pre-wrap text-sm",
+              msg.kind === "error"
+                ? "text-red-700"
+                : msg.kind === "success"
+                ? "text-emerald-700"
+                : "opacity-80",
+            ].join(" ")}
+          >
+            {msg.text}
+          </p>
+        )}
+
+        {debug && (
+          <details className="mt-4 rounded-2xl border border-black/10 bg-black/[0.03] p-4">
+            <summary className="cursor-pointer text-xs font-medium opacity-70">Debug details</summary>
+            <pre className="mt-3 whitespace-pre-wrap text-xs opacity-80">{debug}</pre>
+          </details>
+        )}
       </div>
     </main>
   );
