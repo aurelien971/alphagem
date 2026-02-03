@@ -74,11 +74,11 @@ export default function DesktopNav({
 
         <div className="pointer-events-none absolute left-0 top-full z-50 mt-3 w-[260px] translate-y-1 opacity-0 transition-all duration-150 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
           <div className={dropdownShell}>
-            <Link
-              href="/services#engineering"
+          <Link
+              href="/services#securitization"
               className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
             >
-              {t("services.nav.engineering")}
+              {t("services.nav.securitization")}
             </Link>
             <Link
               href="/services#balance"
@@ -86,11 +86,12 @@ export default function DesktopNav({
             >
               {t("services.nav.balance")}
             </Link>
-            <Link
-              href="/services#securitization"
+        
+                  <Link
+              href="/services#engineering"
               className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
             >
-              {t("services.nav.securitization")}
+              {t("services.nav.engineering")}
             </Link>
           </div>
         </div>

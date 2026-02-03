@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/ThemeProvider";
 import Providers from "@/components/i18n/Providers";
 
@@ -20,6 +21,7 @@ export default function RootLayout({
           <Providers>
             <Navbar />
             <main className="min-h-dvh">{children}</main>
+            <Footer />
           </Providers>
         </ThemeProvider>
       </body>

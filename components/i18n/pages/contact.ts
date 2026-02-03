@@ -38,7 +38,7 @@
 //   "contact.whatWeDo.item2": "Balance sheet optimization and capital strategy",
 //   "contact.whatWeDo.item3": "Financial engineering platforms and market infrastructure",
 
-//   "contact.footer": "© Copyright 2025 Alphagem Advisors",
+//   "contact.footer": "© Copyright 2026 Alphagem Advisors",
 // };
 
 // export const CONTACT_FR: Record<string, string> = {
@@ -83,5 +83,5 @@
 //   "contact.whatWeDo.item3":
 //     "Plateformes d’ingénierie financière et infrastructures de marché",
 
-//   "contact.footer": "© Copyright 2025 Alphagem Advisors",
+//   "contact.footer": "© Copyright 2026 Alphagem Advisors",
 // };

@@ -8,11 +8,16 @@ import TombstoneModal from "./TombstoneModal";
 export default function DealCardV3({ deal }: { deal: Deal }) {
   const [open, setOpen] = useState(false);
 
+  const hasTombstone = Boolean(deal.tombstoneSrc);
+
   return (
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          if (!hasTombstone) return;
+          setOpen(true);
+        }}
         className="h-full w-full text-left"
         aria-label={`Open details for ${deal.logoAlt}`}
       >
@@ -42,23 +47,46 @@ export default function DealCardV3({ deal }: { deal: Deal }) {
             )}
 
             <div className="mt-auto pt-6">
-              <span className="inline-flex rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] px-3 py-1 text-sm opacity-70">
-                View tombstone
-              </span>
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  {hasTombstone && (
+                    <span className="inline-flex rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] px-3 py-1 text-sm opacity-70">
+                      View tombstone
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  {deal.countryCode && (
+                    <span className="inline-flex items-center gap-2 rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] px-3 py-1 text-sm opacity-70">
+                      <Image
+                        src={`https://flagcdn.com/w40/${deal.countryCode.toLowerCase()}.png`}
+                        alt=""
+                        width={18}
+                        height={14}
+                        className="rounded-[2px]"
+                      />
+                      <span>{deal.countryName || deal.countryCode}</span>
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </article>
       </button>
 
-      <TombstoneModal
-        open={open}
-        onClose={() => setOpen(false)}
-        src={deal.tombstoneSrc}
-        alt={deal.tombstoneAlt}
-        title={deal.counterparty}
-        fallbackLogoSrc={deal.logoSrc}
-        fallbackLogoAlt={deal.logoAlt}
-      />
+      {hasTombstone && (
+        <TombstoneModal
+          open={open}
+          onClose={() => setOpen(false)}
+          src={deal.tombstoneSrc}
+          alt={deal.tombstoneAlt}
+          title={deal.counterparty}
+          fallbackLogoSrc={deal.logoSrc}
+          fallbackLogoAlt={deal.logoAlt}
+        />
+      )}
     </>
   );
 }

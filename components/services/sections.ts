@@ -2,7 +2,7 @@ export type ServicesSectionId = "top" | "engineering" | "balance" | "securitizat
 
 export const SERVICES_NAV: { id: ServicesSectionId; label: string }[] = [
   { id: "top", label: "Overview" },
-  { id: "engineering", label: "1. Engineering" },
+{ id: "securitization", label: "1. Securitization" },
   { id: "balance", label: "2. Balance Sheet" },
-  { id: "securitization", label: "3. Securitization" },
+    { id: "engineering", label: "3. Engineering" },
 ];

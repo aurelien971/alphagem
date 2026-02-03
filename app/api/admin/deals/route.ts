@@ -58,6 +58,11 @@ export async function POST(req: Request) {
     const highlightEn = String(fd.get("highlightEn") ?? "").trim();
     const highlightFr = String(fd.get("highlightFr") ?? "").trim();
 
+    const countryCodeRaw = String(fd.get("countryCode") ?? "").trim();
+    const countryNameEn = String(fd.get("countryNameEn") ?? "").trim();
+    const countryNameFr = String(fd.get("countryNameFr") ?? "").trim();
+    const countryCode = countryCodeRaw ? countryCodeRaw.toUpperCase() : "";
+
     if (!id) return bad("missing id");
     if (!amountLabel) return bad("missing amountLabel");
     if (!year) return bad("missing year");
@@ -66,16 +71,16 @@ export async function POST(req: Request) {
     if (!counterpartyEn || !counterpartyFr) return bad("missing counterparty (en/fr)");
     if (!structureEn || !structureFr) return bad("missing structure (en/fr)");
 
+    if (!countryCode) return bad("missing countryCode");
+    if (!countryNameEn || !countryNameFr) return bad("missing countryName (en/fr)");
+
     const logo = fd.get("logo");
     if (!(logo instanceof File) || logo.size === 0) return bad("missing logo file");
 
     const tombstone = fd.get("tombstone");
 
     const safe = (s: string) => s.replace(/\s+/g, "-");
-    const logoUrl = await uploadToBucket(
-      `deals/logos/${safe(id)}-${safe(logo.name)}`,
-      logo
-    );
+    const logoUrl = await uploadToBucket(`deals/logos/${safe(id)}-${safe(logo.name)}`, logo);
 
     let tombstoneUrl = "";
     if (tombstone instanceof File && tombstone.size > 0) {
@@ -93,7 +98,10 @@ export async function POST(req: Request) {
         year,
         logoAlt,
         logoUrl,
-        tombstoneUrl,
+        tombstoneUrl: tombstoneUrl || "",
+
+        countryCode,
+        countryName: { en: countryNameEn, fr: countryNameFr },
 
         program: { en: programEn, fr: programFr },
         counterparty: { en: counterpartyEn, fr: counterpartyFr },
@@ -107,7 +115,7 @@ export async function POST(req: Request) {
       { merge: true }
     );
 
-    return NextResponse.json({ ok: true, id, logoUrl, tombstoneUrl });
+    return NextResponse.json({ ok: true, id, logoUrl, tombstoneUrl: tombstoneUrl || "" });
   } catch (e: any) {
     return NextResponse.json(
       { ok: false, error: e?.message ?? "server_error" },

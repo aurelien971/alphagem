@@ -42,6 +42,6 @@ export const COPY_FR = {
     privacy: "Politique de confidentialité",
     linkedin: "LinkedIn",
     email: "contact@alphagem.net",
-    copyright: "© Copyright 2025 Alphagem Advisors",
+    copyright: "© Copyright 2026 Alphagem Advisors",
   },
 } as const;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { IconAuto, IconMoon, IconSun } from "./icons";
 
 type Mode = "light" | "dark" | "system";
@@ -29,6 +30,14 @@ export default function DesktopControls({
   segBtn: string;
   segTextBtn: string;
 }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <div className="hidden md:flex items-center gap-2">
       <div className={`flex items-center overflow-hidden rounded-full ${pillWrap}`}>

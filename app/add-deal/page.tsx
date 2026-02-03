@@ -8,17 +8,20 @@ type MsgKind = "info" | "error" | "success";
 const ADMIN_PASSWORD = "alphagem121";
 
 const EXAMPLE = {
-  amountLabel: "160 000 000 000 FCFA",
-  year: "2024",
-  programEn: "EN - 'DOLI-P II program'",
-  programFr: "FR - 'Programme DOLI-P II'",
-  counterpartyEn: "EN - 'West African Development Bank'",
-  counterpartyFr: "FR - 'Banque Ouest Africaine de Développement'",
-  structureEn: "EN - 'Multi-originator securitization'",
-  structureFr: "FR - 'Titrisation multi-originateurs'",
-  highlightEn: "EN - 'First mezzanine tranche securitization in UEMOA'",
-  highlightFr: "FR - 'Première tranche mezzanine titrisée en UEMOA'",
-  id: "boad-doli-p2-2024",
+  amountLabel: "148 500 000 000 FCFA",
+  year: "2023",
+  programEn: "DOLI-P program",
+  programFr: "Programme DOLI-P",
+  counterpartyEn: "West African Development Bank",
+  counterpartyFr: "Banque Ouest Africaine de Développement",
+  structureEn: "Securitization of a sovereign loan portfolio",
+  structureFr: "Titrisation de portefeuille de prêts souverains",
+  highlightEn: "Best Financial Transaction of the Year AFIK",
+  highlightFr: "Meilleure transaction de l'annee financial AFIK",
+  countryCode: "FR",
+  countryNameEn: "Senegal",
+  countryNameFr: "Sénégal",
+  id: "boad-doli-p-2023",
 };
 
 function slugify(s: string) {
@@ -47,6 +50,9 @@ export default function AddDealPage() {
   const [counterparty, setCounterparty] = useState<L10n>({ en: "", fr: "" });
   const [structure, setStructure] = useState<L10n>({ en: "", fr: "" });
   const [highlight, setHighlight] = useState<L10n>({ en: "", fr: "" });
+
+  const [countryCode, setCountryCode] = useState("");
+  const [countryName, setCountryName] = useState<L10n>({ en: "", fr: "" });
 
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [tombstoneFile, setTombstoneFile] = useState<File | null>(null);
@@ -84,10 +90,13 @@ export default function AddDealPage() {
       counterparty.fr.trim().length > 0 &&
       structure.en.trim().length > 0 &&
       structure.fr.trim().length > 0 &&
+      countryCode.trim().length > 0 &&
+      countryName.en.trim().length > 0 &&
+      countryName.fr.trim().length > 0 &&
       logoFile != null
       // tombstone is optional
     );
-  }, [unlocked, id, amountLabel, year, program, counterparty, structure, logoFile]);
+  }, [unlocked, id, amountLabel, year, program, counterparty, structure, countryCode, countryName, logoFile]);
 
   const fillExample = () => {
     setMsg(null);
@@ -102,6 +111,9 @@ export default function AddDealPage() {
     setCounterparty({ en: EXAMPLE.counterpartyEn, fr: EXAMPLE.counterpartyFr });
     setStructure({ en: EXAMPLE.structureEn, fr: EXAMPLE.structureFr });
     setHighlight({ en: EXAMPLE.highlightEn, fr: EXAMPLE.highlightFr });
+
+    setCountryCode(EXAMPLE.countryCode);
+    setCountryName({ en: EXAMPLE.countryNameEn, fr: EXAMPLE.countryNameFr });
   };
 
   const clearLogo = () => {
@@ -147,6 +159,10 @@ export default function AddDealPage() {
         fd.set("highlightEn", highlight.en.trim());
         fd.set("highlightFr", highlight.fr.trim());
       }
+
+      fd.set("countryCode", countryCode.trim().toUpperCase());
+      fd.set("countryNameEn", countryName.en.trim());
+      fd.set("countryNameFr", countryName.fr.trim());
 
       if (logoFile) fd.set("logo", logoFile);
       if (tombstoneFile) fd.set("tombstone", tombstoneFile);
@@ -315,13 +331,13 @@ export default function AddDealPage() {
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={program.en}
                 onChange={(e) => setProgram((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.programEn}`}
+                placeholder={`ex EN: ${EXAMPLE.programEn}`}
               />
               <input
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={program.fr}
                 onChange={(e) => setProgram((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.programFr}`}
+                placeholder={`ex FR: ${EXAMPLE.programFr}`}
               />
             </div>
           </div>
@@ -333,13 +349,13 @@ export default function AddDealPage() {
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={counterparty.en}
                 onChange={(e) => setCounterparty((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.counterpartyEn}`}
+                placeholder={`ex EN: ${EXAMPLE.counterpartyEn}`}
               />
               <input
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={counterparty.fr}
                 onChange={(e) => setCounterparty((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.counterpartyFr}`}
+                placeholder={`ex FR: ${EXAMPLE.counterpartyFr}`}
               />
             </div>
           </div>
@@ -351,13 +367,13 @@ export default function AddDealPage() {
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={structure.en}
                 onChange={(e) => setStructure((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.structureEn}`}
+                placeholder={`ex EN: ${EXAMPLE.structureEn}`}
               />
               <input
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={structure.fr}
                 onChange={(e) => setStructure((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.structureFr}`}
+                placeholder={`ex FR: ${EXAMPLE.structureFr}`}
               />
             </div>
           </div>
@@ -369,19 +385,45 @@ export default function AddDealPage() {
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={highlight.en}
                 onChange={(e) => setHighlight((p) => ({ ...p, en: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.highlightEn}`}
+                placeholder={`ex EN: ${EXAMPLE.highlightEn}`}
               />
               <input
                 className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
                 value={highlight.fr}
                 onChange={(e) => setHighlight((p) => ({ ...p, fr: e.target.value }))}
-                placeholder={`ex: ${EXAMPLE.highlightFr}`}
+                placeholder={`ex FR: ${EXAMPLE.highlightFr}`}
               />
             </div>
           </div>
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
+            <p className="text-sm font-medium">Country</p>
+            <p className="mt-1 text-xs opacity-60">ISO code + English/French names.</p>
+
+            <div className="mt-3 grid gap-3">
+              <input
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
+                value={countryCode}
+                onChange={(e) => setCountryCode(e.target.value.toUpperCase())}
+                placeholder="ex: SN"
+              />
+              <input
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
+                value={countryName.en}
+                onChange={(e) => setCountryName((c) => ({ ...c, en: e.target.value }))}
+                placeholder={`ex EN: ${EXAMPLE.countryNameEn}`}
+              />
+              <input
+                className="w-full rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] px-4 py-3 text-sm placeholder:text-xs"
+                value={countryName.fr}
+                onChange={(e) => setCountryName((c) => ({ ...c, fr: e.target.value }))}
+                placeholder={`ex FR: ${EXAMPLE.countryNameFr}`}
+              />
+            </div>
+          </div>
+
           <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -417,8 +459,10 @@ export default function AddDealPage() {
 
             <p className="mt-3 text-xs opacity-60">{logoFile ? `Selected: ${logoFile.name}` : "No file selected"}</p>
           </div>
+        </div>
 
-          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5">
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
+          <div className="rounded-3xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] p-5 md:col-span-2">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-medium">Tombstone (optional)</p>

@@ -36,6 +36,9 @@ export async function GET(_: Request, ctx: { params: Promise<Params> }) {
 
       tombstoneSrc: data.tombstoneUrl ? String(data.tombstoneUrl) : undefined,
       tombstoneAlt: data.tombstoneAlt ? String(data.tombstoneAlt) : undefined,
+      
+countryCode: data.countryCode ? String(data.countryCode) : undefined,
+countryName: pickLocale<string>(data.countryName, loc),
 
       program: pickLocale<string>(data.program, loc) ?? "",
       counterparty: pickLocale<string>(data.counterparty, loc) ?? "",

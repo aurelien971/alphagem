@@ -49,9 +49,9 @@ export default function ServicesSection({
             <div className="mt-8">
               <ul className="space-y-4 text-sm leading-7 opacity-80 md:text-base md:leading-8">
                 {bulletKeys.map((k, index) => (
-                  <li key={k} className={index === 3 ? "" : "flex gap-3"}>
-                    {index !== 3 && (
-                      <span className="mt-[0.55rem] inline-flex h-6 w-6 items-center justify-center rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_6%,transparent)]">
+                  <li key={k} className={index >= 3 ? "" : "flex gap-3"}>
+                    {index < 3 && (
+                      <span className="mt-[0.55rem] inline-flex">
                         <span className="h-1.5 w-1.5 rounded-full bg-[var(--foreground)] opacity-60" />
                       </span>
                     )}

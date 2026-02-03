@@ -14,6 +14,9 @@ export type Deal = {
   tombstoneSrc?: string;
   tombstoneAlt?: string;
 
+  countryCode?: string;
+  countryName?: string;
+
   program: string;
   counterparty: string;
   structure: string;

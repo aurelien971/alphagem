@@ -40,15 +40,21 @@ export default function Footer() {
     <footer className="border-t border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[var(--background)]">
       <div className="mx-auto max-w-6xl px-4 py-12">
         <div className="grid gap-10 md:grid-cols-3 md:items-start">
-          <div>
-            <p className="text-xs tracking-[0.26em] opacity-60">CONTACT</p>
-            <a
-              href="mailto:contact@alphagem.net"
-              className="mt-4 inline-block text-sm font-medium opacity-85 transition-opacity hover:opacity-100"
-            >
-              contact@alphagem.net
-            </a>
-          </div>
+          <div className="flex flex-col gap-4">
+  <Link
+    href="/contact"
+    className="text-xs tracking-[0.26em] opacity-60 transition-opacity hover:opacity-100"
+  >
+    CONTACT
+  </Link>
+
+  <a
+    href="mailto:contact@alphagem.net"
+    className="text-sm font-medium opacity-85 transition-opacity hover:opacity-100"
+  >
+    contact@alphagem.net
+  </a>
+</div>
 
           <div className="md:text-center">
             <Link href="/" className="inline-flex items-center justify-center">
@@ -63,7 +69,7 @@ export default function Footer() {
             </Link>
 
             <div className="mt-5 text-xs opacity-55">
-              © Copyright 2025 Alphagem Advisors
+              © Copyright 2026 Alphagem Advisors
             </div>
           </div>
 

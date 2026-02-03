@@ -241,7 +241,7 @@ export default function MobileMenuOverlay({
         </div>
 
         <div className="mt-auto pt-6 text-center text-xs opacity-60">
-          © Copyright 2025 Alphagem Advisors
+          © Copyright 2026 Alphagem Advisors
         </div>
       </div>
     </div>
