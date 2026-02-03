@@ -62,12 +62,12 @@ export default function HeroSection() {
 
 <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-20 pt-36 sm:pb-16 sm:pt-32">
         <div className="w-full [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
-          <div className="mt-10 grid gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-14">
+<div className="mt-6 grid gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-14">
             <div>
               <h2 className="text-base font-semibold tracking-wide text-white sm:text-lg">
                 {t("home.hero.leftTitle")}
               </h2>
-              <p className="mt-4 max-w-prose text-base leading-8 text-white/85 sm:text-lg sm:leading-8">
+<p className="mt-3 max-w-prose text-base leading-6 text-white/85 sm:text-lg sm:leading-8">
                 {t("home.hero.leftBody")}
               </p>
             </div>
@@ -78,7 +78,7 @@ export default function HeroSection() {
               <h2 className="text-base font-semibold tracking-wide text-white sm:text-lg">
                 {t("home.hero.rightTitle")}
               </h2>
-              <p className="mt-4 max-w-prose text-base leading-8 text-white/85 sm:text-lg sm:leading-8">
+<p className="mt-3 max-w-prose text-base leading-6 text-white/85 sm:text-lg sm:leading-8">
                 {t("home.hero.rightBody")}
               </p>
             </div>
