@@ -198,26 +198,26 @@ const { t } = useI18n();
                 {t("contact.whatWeDo.kicker")}
               </p>
 
-              <ul className="mt-5 space-y-3 text-sm leading-7 opacity-80">
-                <li className="flex gap-3">
-                  <Dot />
-                  <span>{t("contact.whatWeDo.item1")}</span>
-                </li>
-                <li className="flex gap-3">
-                  <Dot />
-                  <span>{t("contact.whatWeDo.item2")}</span>
-                </li>
-                <li className="flex gap-3">
-                  <Dot />
-                  <span>{t("contact.whatWeDo.item3")}</span>
-                </li>
-              </ul>
+            <ul className="mt-5 space-y-3 text-sm leading-7 opacity-80">
+  <li className="flex items-start gap-3">
+    <div className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+    <span>{t("contact.whatWeDo.item1")}</span>
+  </li>
+  <li className="flex items-start gap-3">
+    <div className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+    <span>{t("contact.whatWeDo.item2")}</span>
+  </li>
+  <li className="flex items-start gap-3">
+    <div className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+    <span>{t("contact.whatWeDo.item3")}</span>
+  </li>
+</ul>
             </div>
           </div>
         </div>
 
         <div className="mt-16 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" />
-        <div className="mt-10 text-xs opacity-60">{t("contact.footer")}</div>
+        {/* <div className="mt-10 text-xs opacity-60">{t("contact.footer")}</div> */}
       </section>
     </main>
   );

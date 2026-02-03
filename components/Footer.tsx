@@ -61,8 +61,8 @@ export default function Footer() {
               <Image
                 src={logoSrc}
                 alt="Alphagem"
-                width={180}
-                height={48}
+                width={120}
+                height={28}
                 className="h-8 w-auto opacity-90"
                 priority={false}
               />

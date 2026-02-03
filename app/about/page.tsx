@@ -34,7 +34,7 @@ export default function AboutPage() {
                 <div className="h-px w-full bg-[var(--border)]" />
 
                 <TeamSection />
-                <div className="h-px w-full bg-[var(--border)]" />
+                {/* <div className="h-px w-full bg-[var(--border)]" /> */}
 
                 <ValuesSection />
               </div>

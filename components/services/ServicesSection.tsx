@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useI18n } from "@/components/i18n/i18n";
 
 type Props = {
@@ -32,7 +33,7 @@ export default function ServicesSection({
   const { t } = useI18n();
 
   return (
-    <section id={id} className="scroll-mt-28">
+    <section id={id} className="scroll-mt-20">
       <div className="border-t border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] pt-10">
         <p className="text-xs tracking-[0.26em] opacity-60">{t(eyebrowKey)}</p>
 

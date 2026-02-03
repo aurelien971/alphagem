@@ -51,7 +51,7 @@ function TeamCard({
         </a>
       </div>
 
-      <div className="mt-7 h-px w-full bg-[var(--border)]" />
+      {/* <div className="mt-7 h-px w-full bg-[var(--border)]" /> */}
 
       <p className="mt-6 text-sm leading-7 text-[var(--muted)]">{bio}</p>
     </div>
