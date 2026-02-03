@@ -40,11 +40,22 @@ export default function DealCardV3({ deal }: { deal: Deal }) {
 
             <p className="mt-4 text-sm leading-7 opacity-75">{deal.structure}</p>
 
-            {deal.highlight && (
-              <div className="mt-5 rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_3.5%,transparent)] px-4 py-3">
-                <p className="text-sm leading-6 opacity-80">{deal.highlight}</p>
-              </div>
-            )}
+     {deal.highlight && (
+  <div className="mt-5 rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_3.5%,transparent)] px-4 py-3">
+    <div className="flex items-start gap-2">
+      <Image
+        src="/star.png"
+        alt=""
+        width={16}
+        height={16}
+        className="mt-[2px] opacity-80"
+      />
+      <p className="text-sm leading-6 opacity-80">
+        {deal.highlight}
+      </p>
+    </div>
+  </div>
+)}
 
             <div className="mt-auto pt-6">
               <div className="flex items-center justify-between gap-3">
