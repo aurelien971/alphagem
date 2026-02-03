@@ -60,7 +60,7 @@ export default function HeroSection() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/30 to-black/45" />
 
-      <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-12 pt-28 sm:pb-16 sm:pt-32">
+<div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-20 pt-36 sm:pb-16 sm:pt-32">
         <div className="w-full [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
           <div className="mt-10 grid gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-14">
             <div>
