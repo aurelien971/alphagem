@@ -43,7 +43,7 @@ export default function AboutHero() {
         sizes="100vw"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />
+<div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/55 to-black/75" />
 
       <div className="relative mx-auto flex h-full max-w-[1400px] items-end px-4 pb-16 pt-28 md:pb-20">
         <div className="grid w-full items-end lg:grid-cols-[14rem_1fr] lg:gap-10">

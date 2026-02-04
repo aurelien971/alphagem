@@ -24,7 +24,7 @@ export default function ValuesSection() {
         </div>
       </div>
 
-      <div aria-hidden className="h-[28vh] md:h-[38vh]" />
+      {/* <div aria-hidden className="h-[28vh] md:h-[38vh]" /> */}
     </section>
   );
 }

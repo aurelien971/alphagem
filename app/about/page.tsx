@@ -9,7 +9,7 @@ import ValuesSection from "@/components/about/ValuesSection";
 
 export default function AboutPage() {
   return (
-    <main className="bg-[var(--background)] text-[var(--foreground)] pb-[40vh]">
+<main className="bg-[var(--background)] text-[var(--foreground)]">
       <AboutHero />
 
       <section className="bg-[var(--background)] text-[var(--foreground)]">
@@ -39,7 +39,7 @@ export default function AboutPage() {
                 <ValuesSection />
               </div>
 
-              <div className="h-24 md:h-32" />
+
             </div>
           </div>
         </div>

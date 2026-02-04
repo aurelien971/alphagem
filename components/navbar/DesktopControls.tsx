@@ -39,7 +39,7 @@ export default function DesktopControls({
   if (!mounted) return null;
 
   return (
-    <div className="hidden md:flex items-center gap-2">
+<div className="hidden lg:flex items-center gap-2">
       <div className={`flex items-center overflow-hidden rounded-full ${pillWrap}`}>
         <button
           type="button"
@@ -61,7 +61,7 @@ export default function DesktopControls({
           <IconMoon className="h-4 w-4" />
         </button>
 
-        <button
+        {/* <button
           type="button"
           onClick={() => setTheme("system")}
           aria-label={t("theme.auto")}
@@ -69,7 +69,7 @@ export default function DesktopControls({
           title={t("theme.auto")}
         >
           <IconAuto className="h-4 w-4" />
-        </button>
+        </button> */}
       </div>
 
       <div className={`flex items-center overflow-hidden rounded-full ${pillWrap}`}>

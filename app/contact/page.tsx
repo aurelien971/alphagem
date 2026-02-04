@@ -216,7 +216,7 @@ const { t } = useI18n();
           </div>
         </div>
 
-        <div className="mt-16 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" />
+      
         {/* <div className="mt-10 text-xs opacity-60">{t("contact.footer")}</div> */}
       </section>
     </main>

@@ -16,14 +16,14 @@ export default function MobileTopbar({
   mobileHeaderText: string;
 }) {
   return (
-    <div className="md:hidden w-full">
+    <div className="lg:hidden w-full">
       <div className="relative flex items-center justify-between">
         <div className="w-10" />
 
         {/* ALWAYS BLUE LOGO */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Image
-            src="/wordmark.png"
+            src="/wordmark4.png"
             alt="Alphagem"
             width={120}
             height={28}

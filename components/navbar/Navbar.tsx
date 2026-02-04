@@ -14,6 +14,11 @@ import MobileMenuOverlay from "./MobileMenuOverlay";
 type Mode = "light" | "dark" | "system";
 type Resolved = "light" | "dark";
 
+type AssetsDoc = {
+  contactColor?: string;
+  portfolioColor?: string;
+};
+
 function resolveTheme(mode: Mode): Resolved {
   if (mode === "light") return "light";
   if (mode === "dark") return "dark";
@@ -21,6 +26,17 @@ function resolveTheme(mode: Mode): Resolved {
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
+}
+
+function normalizeHex(input: string | undefined | null): string | null {
+  const raw = String(input ?? "").trim();
+  if (!raw) return null;
+
+  const withHash = raw.startsWith("#") ? raw : `#${raw}`;
+  const hex = withHash.toUpperCase();
+
+  if (/^#([0-9A-F]{3}|[0-9A-F]{6}|[0-9A-F]{8})$/.test(hex)) return hex;
+  return null;
 }
 
 export default function Navbar() {
@@ -31,15 +47,41 @@ export default function Navbar() {
 
   const { locale, setLocale, t } = useI18n();
 
-  // Keep this if you still want the theme toggles to work,
-  // but the NAVBAR STYLE is now forced to "About-style" everywhere.
-  const isLightNavPage = useMemo(() => {
-    return (
-      pathname.startsWith("/about") ||
-      pathname.startsWith("/portfolio") ||
-      pathname.startsWith("/contact")
-    );
-  }, [pathname]);
+  const [assetColors, setAssetColors] = useState<{ contact?: string; portfolio?: string }>({});
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/assets", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled) return;
+
+        const data = (json ?? {}) as AssetsDoc;
+
+        const contact = normalizeHex(data.contactColor);
+        const portfolio = normalizeHex(data.portfolioColor);
+
+        // Debug so you can confirm it is actually coming through
+        console.log("[Navbar] /api/assets colors:", {
+          raw: { contactColor: data.contactColor, portfolioColor: data.portfolioColor },
+          normalized: { contact, portfolio },
+        });
+
+        setAssetColors({
+          contact: contact ?? undefined,
+          portfolio: portfolio ?? undefined,
+        });
+      })
+      .catch((err) => {
+        console.log("[Navbar] /api/assets fetch failed:", err);
+        if (!cancelled) setAssetColors({});
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const read = () => {
@@ -95,13 +137,13 @@ export default function Navbar() {
     window.__setThemeMode?.(m);
   };
 
-  // Previously you were switching navbar styling based on page + theme.
-  // You asked to stamp the About-style navbar everywhere:
-  // solid white bar, blue logo, gray idle links, blue hover, blue active.
-  // So we force these values now.
-  const lightNav = true;
+  const navBgColor = useMemo(() => {
+    if (pathname.startsWith("/contact")) return assetColors.contact ?? "transparent";
+    if (pathname.startsWith("/portfolio")) return assetColors.portfolio ?? "transparent";
+    return "transparent";
+  }, [pathname, assetColors.contact, assetColors.portfolio]);
 
-  const shellClass = "bg-white/65 backdrop-blur-xl border-b border-black/10";
+  const shellClass = "backdrop-blur-xl border-b border-black/10";
 
   const linkBase = "text-sm tracking-wide transition-colors";
   const linkActive = "text-[#0E3453]";
@@ -114,8 +156,7 @@ export default function Navbar() {
   const dropdownShell =
     "rounded-xl border border-black/10 bg-white p-2 shadow-[0_18px_50px_rgba(0,0,0,0.18)]";
 
-  const segBase =
-    "inline-flex items-center justify-center rounded-full transition-colors select-none";
+  const segBase = "inline-flex items-center justify-center rounded-full transition-colors select-none";
   const segBtn = "h-8 w-9 sm:w-8";
   const segTextBtn = "h-8 px-3 text-xs tracking-wide";
 
@@ -127,15 +168,16 @@ export default function Navbar() {
   const overlayLinkIdle = "text-black/70";
   const overlayLinkActive = "text-black";
 
+  const lightNav = true;
+
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className={shellClass}>
+      <div className={shellClass} style={{ backgroundColor: navBgColor }}>
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          {/* Desktop logo (FORCED BLUE WORDMARK EVERYWHERE) */}
-          <div className="hidden md:block">
+<div className="hidden lg:block">
             <Link href="/" className="flex items-center">
               <Image
-                src="/wordmark.png"
+                src="/wordmark4.png"
                 alt="Alphagem"
                 width={120}
                 height={28}
@@ -145,7 +187,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile topbar */}
           <MobileTopbar
             pathname={pathname}
             lightNav={lightNav}
@@ -153,7 +194,6 @@ export default function Navbar() {
             mobileHeaderText={mobileHeaderText}
           />
 
-          {/* Desktop nav */}
           <DesktopNav
             pathname={pathname}
             t={t}
@@ -163,7 +203,6 @@ export default function Navbar() {
             dropdownShell={dropdownShell}
           />
 
-          {/* Desktop controls (theme toggles still work) */}
           <DesktopControls
             mode={mode}
             setTheme={setTheme}

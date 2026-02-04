@@ -20,15 +20,18 @@ export default function DesktopNav({
   const aboutActive = pathname.startsWith("/about");
   const servicesActive = pathname.startsWith("/services");
 
+  const topLinkClass = (active: boolean) =>
+    `${linkBase} ${active ? linkActive : linkIdle} whitespace-nowrap`;
+
   return (
-    <nav className="hidden flex-1 items-center justify-center gap-6 md:flex">
-      <Link href="/" className={`${linkBase} ${pathname === "/" ? linkActive : linkIdle}`}>
+    <nav className="hidden lg:flex flex-1 items-center justify-center gap-6">
+      <Link href="/" className={topLinkClass(pathname === "/")}>
         {t("nav.home")}
       </Link>
 
       {/* ABOUT dropdown */}
       <div className="relative group">
-        <Link href="/about" className={`${linkBase} ${aboutActive ? linkActive : linkIdle}`}>
+        <Link href="/about" className={topLinkClass(aboutActive)}>
           {t("nav.about")}
         </Link>
 
@@ -38,25 +41,25 @@ export default function DesktopNav({
           <div className={dropdownShell}>
             <Link
               href="/about#about"
-              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
+              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453] whitespace-nowrap"
             >
               {t("about.nav.about")}
             </Link>
             <Link
               href="/about#figures"
-              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
+              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453] whitespace-nowrap"
             >
               {t("about.nav.figures")}
             </Link>
             <Link
               href="/about#team"
-              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
+              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453] whitespace-nowrap"
             >
               {t("about.nav.team")}
             </Link>
             <Link
               href="/about#values"
-              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
+              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453] whitespace-nowrap"
             >
               {t("about.nav.values")}
             </Link>
@@ -66,7 +69,7 @@ export default function DesktopNav({
 
       {/* SERVICES dropdown */}
       <div className="relative group">
-        <Link href="/services" className={`${linkBase} ${servicesActive ? linkActive : linkIdle}`}>
+        <Link href="/services" className={topLinkClass(servicesActive)}>
           {t("nav.services")}
         </Link>
 
@@ -74,22 +77,21 @@ export default function DesktopNav({
 
         <div className="pointer-events-none absolute left-0 top-full z-50 mt-3 w-[260px] translate-y-1 opacity-0 transition-all duration-150 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
           <div className={dropdownShell}>
-          <Link
+            <Link
               href="/services#securitization"
-              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
+              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453] whitespace-nowrap"
             >
               {t("services.nav.securitization")}
             </Link>
             <Link
               href="/services#balance"
-              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
+              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453] whitespace-nowrap"
             >
               {t("services.nav.balance")}
             </Link>
-        
-                  <Link
+            <Link
               href="/services#engineering"
-              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453]"
+              className="block rounded-lg px-3 py-2 text-sm font-normal text-black/80 transition-colors hover:bg-black/5 hover:text-[#0E3453] whitespace-nowrap"
             >
               {t("services.nav.engineering")}
             </Link>
@@ -97,17 +99,11 @@ export default function DesktopNav({
         </div>
       </div>
 
-      <Link
-        href="/portfolio"
-        className={`${linkBase} ${pathname.startsWith("/portfolio") ? linkActive : linkIdle}`}
-      >
+      <Link href="/portfolio" className={topLinkClass(pathname.startsWith("/portfolio"))}>
         {t("nav.portfolio")}
       </Link>
 
-      <Link
-        href="/contact"
-        className={`${linkBase} ${pathname.startsWith("/contact") ? linkActive : linkIdle}`}
-      >
+      <Link href="/contact" className={topLinkClass(pathname.startsWith("/contact"))}>
         {t("nav.contact")}
       </Link>
     </nav>

@@ -93,10 +93,10 @@ export default function MobileMenuOverlay({
             <Image
               src={
                 pathname === "/" || pathname.startsWith("/services")
-                  ? "/logowhite.png"
+                  ? "/wordmark4.png"
                   : lightNav
-                    ? "/wordmark.png"
-                    : "/logowhite.png"
+                    ? "/wordmark4.png"
+                    : "/wordmark4.png"
               }
               alt="Alphagem"
               width={120}

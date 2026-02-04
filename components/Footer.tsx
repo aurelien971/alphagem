@@ -33,7 +33,7 @@ export default function Footer() {
   }, []);
 
   const logoSrc = useMemo(() => {
-    return isDarkEffective ? "/logowhite.png" : "/wordmark.png";
+    return isDarkEffective ? "/logowhite.png" : "/wordmark4.png";
   }, [isDarkEffective]);
 
   return (

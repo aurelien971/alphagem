@@ -48,6 +48,10 @@ export default function HeroSection() {
     };
   }, []);
 
+  const titleClass = "text-base font-semibold tracking-wide text-white sm:text-lg";
+  const bodyClass =
+    "mt-3 max-w-prose text-base leading-7 text-white/85 sm:text-lg sm:leading-8";
+
   return (
     <section className="relative h-dvh w-full overflow-hidden">
       <Image
@@ -60,27 +64,19 @@ export default function HeroSection() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-black/30 to-black/45" />
 
-<div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-20 pt-36 sm:pb-16 sm:pt-32">
+      <div className="relative mx-auto flex h-full max-w-6xl items-end px-4 pb-20 pt-36 sm:pb-16 sm:pt-32">
         <div className="w-full [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
-<div className="mt-6 grid gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-14">
+          <div className="mt-6 grid gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-14">
             <div>
-              <h2 className="text-base font-semibold tracking-wide text-white sm:text-lg">
-                {t("home.hero.leftTitle")}
-              </h2>
-<p className="mt-3 max-w-prose text-base leading-6 text-white/85 sm:text-lg sm:leading-8">
-                {t("home.hero.leftBody")}
-              </p>
+              <h2 className={titleClass}>{t("home.hero.leftTitle")}</h2>
+              <p className={bodyClass}>{t("home.hero.leftBody")}</p>
             </div>
 
             <div className="hidden w-px bg-white/25 md:block" />
 
             <div>
-              <h2 className="text-base font-semibold tracking-wide text-white sm:text-lg">
-                {t("home.hero.rightTitle")}
-              </h2>
-<p className="mt-3 max-w-prose text-base leading-6 text-white/85 sm:text-lg sm:leading-8">
-                {t("home.hero.rightBody")}
-              </p>
+              <h2 className={titleClass}>{t("home.hero.rightTitle")}</h2>
+              <p className={bodyClass}>{t("home.hero.rightBody")}</p>
             </div>
           </div>
 

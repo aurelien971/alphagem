@@ -81,5 +81,17 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 export function useI18n() {
   const ctx = useContext(I18nContext);
   if (!ctx) throw new Error("useI18n outside provider");
-  return ctx;
+
+  const safeT = (key: string) => {
+    const out = ctx.t(key);
+
+    // If the output is literally the key (common fallback) or looks like a key, hide it
+    if (!out) return "";
+    if (out === key) return "";
+    if (/[a-z0-9_-]+\.[a-z0-9_.-]+/i.test(out) && out.length <= 48) return "";
+
+    return out;
+  };
+
+  return { ...ctx, t: safeT };
 }
