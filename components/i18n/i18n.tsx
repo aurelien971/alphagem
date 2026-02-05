@@ -16,23 +16,15 @@ const I18nContext = createContext<I18nCtx | null>(null);
 
 async function fetchDict(page: string, locale: Locale): Promise<Dict> {
   try {
-    const url = `/api/i18n/${encodeURIComponent(page)}/${locale}?v=${Date.now()}`;
-
-    const res = await fetch(url, {
+    const res = await fetch(`/api/i18n/${encodeURIComponent(page)}/${locale}`, {
       cache: "no-store",
       credentials: "same-origin",
     });
 
-    if (!res.ok) {
-      console.warn("i18n missing:", { page, locale, status: res.status });
-      return {};
-    }
-
+    if (!res.ok) return {};
     const json = await res.json().catch(() => null);
-    const strings = (json && typeof json === "object" && (json as any).strings) ? (json as any).strings : {};
-    return strings ?? {};
-  } catch (err) {
-    console.warn("i18n fetch failed:", { page, locale, err });
+    return (json as any)?.strings ?? {};
+  } catch {
     return {};
   }
 }
@@ -47,7 +39,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       const stored = window.localStorage.getItem("locale");
       if (stored === "en" || stored === "fr") return stored;
     } catch {
-      // ignore
+      // iOS can throw here in some modes
     }
 
     return "fr";
@@ -66,7 +58,6 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         const dicts = results
           .filter((r): r is PromiseFulfilledResult<Dict> => r.status === "fulfilled")
           .map((r) => r.value);
-
         setDict(Object.assign({}, ...dicts));
       })
       .finally(() => {
@@ -82,11 +73,14 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     return {
       locale,
       setLocale: (l) => {
+        // Always update UI immediately
         setLocaleState(l);
+
+        // Best-effort persistence
         try {
           window.localStorage.setItem("locale", l);
-        } catch (err) {
-          console.warn("localStorage setItem failed:", err);
+        } catch (e) {
+          console.warn("[i18n] localStorage setItem failed:", e);
         }
       },
       t: (key) => dict[key] ?? key,
