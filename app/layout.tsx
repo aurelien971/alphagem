@@ -16,12 +16,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-dvh bg-[var(--background)] text-[var(--foreground)]">
+      <body className="min-h-dvh bg-[var(--background)] text-[var(--foreground)] flex flex-col">
         <ThemeProvider>
           <Providers>
-            <Navbar />
-            <main className="min-h-dvh">{children}</main>
-            <Footer />
+            <div className="flex min-h-dvh flex-col">
+              <Navbar />
+              <div className="flex-1">{children}</div>
+              <Footer />
+            </div>
           </Providers>
         </ThemeProvider>
       </body>

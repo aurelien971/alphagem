@@ -17,6 +17,10 @@ type Resolved = "light" | "dark";
 type AssetsDoc = {
   contactColor?: string;
   portfolioColor?: string;
+  servicesColor?: string;
+
+  wordmarkLight?: string; // blue
+  wordmarkDark?: string;  // white
 };
 
 function resolveTheme(mode: Mode): Resolved {
@@ -47,7 +51,13 @@ export default function Navbar() {
 
   const { locale, setLocale, t } = useI18n();
 
-  const [assetColors, setAssetColors] = useState<{ contact?: string; portfolio?: string }>({});
+  const [assetColors, setAssetColors] = useState<{
+    contact?: string;
+    portfolio?: string;
+    services?: string;
+  }>({});
+
+  const [wordmark, setWordmark] = useState<{ light?: string; dark?: string }>({});
 
   useEffect(() => {
     let cancelled = false;
@@ -61,21 +71,25 @@ export default function Navbar() {
 
         const contact = normalizeHex(data.contactColor);
         const portfolio = normalizeHex(data.portfolioColor);
-
-        // Debug so you can confirm it is actually coming through
-        console.log("[Navbar] /api/assets colors:", {
-          raw: { contactColor: data.contactColor, portfolioColor: data.portfolioColor },
-          normalized: { contact, portfolio },
-        });
+        const services = normalizeHex(data.servicesColor);
 
         setAssetColors({
           contact: contact ?? undefined,
           portfolio: portfolio ?? undefined,
+          services: services ?? undefined,
+        });
+
+        setWordmark({
+          light: typeof data.wordmarkLight === "string" ? data.wordmarkLight : undefined,
+          dark: typeof data.wordmarkDark === "string" ? data.wordmarkDark : undefined,
         });
       })
       .catch((err) => {
         console.log("[Navbar] /api/assets fetch failed:", err);
-        if (!cancelled) setAssetColors({});
+        if (!cancelled) {
+          setAssetColors({});
+          setWordmark({});
+        }
       });
 
     return () => {
@@ -140,8 +154,9 @@ export default function Navbar() {
   const navBgColor = useMemo(() => {
     if (pathname.startsWith("/contact")) return assetColors.contact ?? "transparent";
     if (pathname.startsWith("/portfolio")) return assetColors.portfolio ?? "transparent";
+    if (pathname.startsWith("/services")) return assetColors.services ?? "transparent";
     return "transparent";
-  }, [pathname, assetColors.contact, assetColors.portfolio]);
+  }, [pathname, assetColors.contact, assetColors.portfolio, assetColors.services]);
 
   const shellClass = "backdrop-blur-xl border-b border-black/10";
 
@@ -170,14 +185,16 @@ export default function Navbar() {
 
   const lightNav = true;
 
+  const logoSrc = wordmark.light || "/wordmark6.png";
+
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div className={shellClass} style={{ backgroundColor: navBgColor }}>
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-<div className="hidden lg:block">
+          <div className="hidden lg:block">
             <Link href="/" className="flex items-center">
               <Image
-                src="/wordmark4.png"
+                src={logoSrc}
                 alt="Alphagem"
                 width={120}
                 height={28}

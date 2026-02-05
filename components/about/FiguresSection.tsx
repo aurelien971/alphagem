@@ -14,11 +14,8 @@ function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
 }
 
-// Handles: "1,200", "1200+", "€12k", "12.5%", "1.2M", "£3.4B", etc.
 function parseFigureValue(raw: string): ParsedValue {
   const s = (raw ?? "").trim();
-
-  // Pull out first numeric chunk (with commas/decimals)
   const numMatch = s.match(/-?\d[\d,]*(?:\.\d+)?/);
   if (!numMatch) return { target: 0, prefix: "", suffix: s, decimals: 0 };
 
@@ -31,9 +28,9 @@ function parseFigureValue(raw: string): ParsedValue {
   const hasM = /m/i.test(suffix);
   const hasB = /b/i.test(suffix);
 
-  suffix = suffix.replace(/\s*/g, ""); // tighten suffix spacing
+  suffix = suffix.replace(/\s*/g, "");
 
-  const decimals = (numStr.split(".")[1]?.length ?? 0);
+  const decimals = numStr.split(".")[1]?.length ?? 0;
 
   let base = Number(numStr.replace(/,/g, ""));
   if (!Number.isFinite(base)) base = 0;
@@ -58,24 +55,6 @@ function formatNumber(n: number, decimals: number) {
   });
 }
 
-function easeOutCubic(t: number) {
-  return 1 - Math.pow(1 - t, 3);
-}
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = React.useState(false);
-
-  React.useEffect(() => {
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setReduced(mql.matches);
-    onChange();
-    mql.addEventListener?.("change", onChange);
-    return () => mql.removeEventListener?.("change", onChange);
-  }, []);
-
-  return reduced;
-}
-
 function useInViewOnce<T extends Element>(options?: IntersectionObserverInit) {
   const ref = React.useRef<T | null>(null);
   const [inView, setInView] = React.useState(false);
@@ -98,18 +77,6 @@ function useInViewOnce<T extends Element>(options?: IntersectionObserverInit) {
   return { ref, inView };
 }
 
-function unitLabelFromRawSuffix(suffix: string) {
-  const suf = suffix.toLowerCase();
-
-  // Keep the original suffix text so you preserve " million" vs "M" vs "m"
-  // We just need to detect what scale it implies.
-  if (/\bbillion\b/.test(suf) || /\bbn\b/.test(suf) || /\bb\b/.test(suf)) return { scale: 1_000_000_000 };
-  if (/\bmillion\b/.test(suf) || /\bmn\b/.test(suf) || /\bm\b/.test(suf)) return { scale: 1_000_000 };
-  if (/\bthousand\b/.test(suf) || /\bk\b/.test(suf)) return { scale: 1_000 };
-
-  return { scale: 1 };
-}
-
 function AnimatedFigure({
   raw,
   durationMs = 3000,
@@ -120,21 +87,16 @@ function AnimatedFigure({
   className?: string;
 }) {
   const { ref, inView } = useInViewOnce<HTMLDivElement>({ threshold: 0.35 });
-
   const parsed = React.useMemo(() => parseFigureValue(raw), [raw]);
 
-  // Decide whether raw is already in "millions" (has M/million)
-  // If not, assume parsed.target is the full number and convert to millions.
   const totalMillions = React.useMemo(() => {
     const hasMillionUnit =
       /\bmillion\b/i.test(parsed.suffix) || /\bm\b/i.test(parsed.suffix);
 
     if (hasMillionUnit) {
-      // "$873 million" or "873M" -> 873
       return Math.max(0, Math.floor(parsed.target / 1_000_000));
     }
 
-    // "873,000,000" -> 873
     return Math.max(0, Math.floor(parsed.target / 1_000_000));
   }, [parsed.target, parsed.suffix]);
 
@@ -153,7 +115,7 @@ function AnimatedFigure({
     setDone(false);
     setCurrentMillions(1);
 
-    const steps = totalMillions - 1; // starting at 1
+    const steps = totalMillions - 1;
     const stepDuration = durationMs / steps;
 
     let current = 1;
@@ -179,11 +141,11 @@ function AnimatedFigure({
     return () => cancelAnimationFrame(raf);
   }, [inView, durationMs, totalMillions]);
 
-  // Render in a stable "millions" format during animation
-  // Keep prefix, force a readable " million" suffix while animating.
-const animatedText = `${parsed.prefix}${formatNumber(currentMillions * 1_000_000, 0)}`;
+  const animatedText = `${parsed.prefix}${formatNumber(
+    currentMillions * 1_000_000,
+    0
+  )}`;
 
-  // If you prefer the exact original formatting at the end, keep this:
   const text = done ? raw : animatedText;
 
   return (
@@ -200,16 +162,18 @@ const animatedText = `${parsed.prefix}${formatNumber(currentMillions * 1_000_000
   );
 }
 
-
-
 export default function FiguresSection() {
-  const { t } = useI18n();
+  const { t, isLoading } = useI18n();
 
-  const figures = [
-    { value: t("about.figures.items.0.value"), label: t("about.figures.items.0.label") },
-    { value: t("about.figures.items.1.value"), label: t("about.figures.items.1.label") },
-    { value: t("about.figures.items.2.value"), label: t("about.figures.items.2.label") },
-  ];
+  const figures = React.useMemo(() => {
+    const items = [
+      { id: "0", value: t("about.figures.items.0.value"), label: t("about.figures.items.0.label") },
+      { id: "1", value: t("about.figures.items.1.value"), label: t("about.figures.items.1.label") },
+      { id: "2", value: t("about.figures.items.2.value"), label: t("about.figures.items.2.label") },
+    ];
+
+    return items.filter((f) => Boolean(f.value?.trim()) && Boolean(f.label?.trim()));
+  }, [t]);
 
   return (
     <section id="figures" className="scroll-mt-28">
@@ -221,21 +185,23 @@ export default function FiguresSection() {
         {t("about.figures.title")}
       </h2>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {figures.map((f) => (
-          <div
-            key={f.label}
-            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-7"
-          >
-            <AnimatedFigure
-              raw={f.value}
-              durationMs={3000}
-              className="text-3xl font-semibold tracking-tight text-[var(--foreground)] md:text-4xl"
-            />
-            <div className="mt-3 text-sm text-[var(--muted)]">{f.label}</div>
-          </div>
-        ))}
-      </div>
+      {!isLoading && figures.length > 0 ? (
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {figures.map((f) => (
+            <div
+              key={f.id}
+              className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-7"
+            >
+              <AnimatedFigure
+                raw={f.value}
+                durationMs={3000}
+                className="text-3xl font-semibold tracking-tight text-[var(--foreground)] md:text-4xl"
+              />
+              <div className="mt-3 text-sm text-[var(--muted)]">{f.label}</div>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       <div className="mt-10 text-[var(--muted)]">{t("about.figures.footnote")}</div>
     </section>

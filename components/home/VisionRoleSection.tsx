@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useI18n } from "@/components/i18n/i18n";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type AssetsDoc = {
   homeVisionUrl?: string;
@@ -39,7 +39,7 @@ function HexIcon() {
 }
 
 export default function VisionRoleSection() {
-  const { t } = useI18n();
+  const { t, isLoading } = useI18n();
   const [visionSrc, setVisionSrc] = useState<string>("");
 
   useEffect(() => {
@@ -62,30 +62,48 @@ export default function VisionRoleSection() {
     };
   }, []);
 
-  const roleItems = [
-    t("home.role.items.0"),
-    t("home.role.items.1"),
-    t("home.role.items.2"),
-    t("home.role.items.3"),
-  ];
+  const roleItems = useMemo(() => {
+    const items = [
+      { id: "role-0", text: t("home.role.items.0") },
+      { id: "role-1", text: t("home.role.items.1") },
+      { id: "role-2", text: t("home.role.items.2") },
+      { id: "role-3", text: t("home.role.items.3") },
+    ];
+    return items.filter((x) => Boolean(x.text?.trim()));
+  }, [t]);
 
-  const commitments = [
-    {
-      title: t("home.commitment.items.0.title"),
-      label: t("home.commitment.items.0.label"),
-      body: t("home.commitment.items.0.body"),
-    },
-    {
-      title: t("home.commitment.items.1.title"),
-      label: t("home.commitment.items.1.label"),
-      body: t("home.commitment.items.1.body"),
-    },
-    {
-      title: t("home.commitment.items.2.title"),
-      label: t("home.commitment.items.2.label"),
-      body: t("home.commitment.items.2.body"),
-    },
-  ];
+  const commitments = useMemo(() => {
+    const items = [
+      {
+        id: "commitment-0",
+        title: t("home.commitment.items.0.title"),
+        label: t("home.commitment.items.0.label"),
+        body: t("home.commitment.items.0.body"),
+      },
+      {
+        id: "commitment-1",
+        title: t("home.commitment.items.1.title"),
+        label: t("home.commitment.items.1.label"),
+        body: t("home.commitment.items.1.body"),
+      },
+      {
+        id: "commitment-2",
+        title: t("home.commitment.items.2.title"),
+        label: t("home.commitment.items.2.label"),
+        body: t("home.commitment.items.2.body"),
+      },
+    ];
+
+    return items.filter(
+      (c) =>
+        Boolean(c.title?.trim()) &&
+        Boolean(c.label?.trim()) &&
+        Boolean(c.body?.trim())
+    );
+  }, [t]);
+
+  const showRoleList = !isLoading && roleItems.length > 0;
+  const showCommitments = !isLoading && commitments.length > 0;
 
   return (
     <section id="vision" className="relative w-full overflow-hidden">
@@ -123,16 +141,18 @@ export default function VisionRoleSection() {
                     {t("home.role.kicker")}
                   </p>
 
-                  <ul className="mt-4 space-y-3 text-sm leading-7 text-white/85 md:text-base md:leading-8">
-                    {roleItems.map((txt, i) => (
-                      <li key={`role-${i}`} className="flex gap-3">
-                        <span className="mt-[0.2rem] inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/18 bg-white/10 text-white/90">
-                          <CheckIcon />
-                        </span>
-                        <span className="min-w-0">{txt}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {showRoleList ? (
+                    <ul className="mt-4 space-y-3 text-sm leading-7 text-white/85 md:text-base md:leading-8">
+                      {roleItems.map((item) => (
+                        <li key={item.id} className="flex gap-3">
+                          <span className="mt-[0.2rem] inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/18 bg-white/10 text-white/90">
+                            <CheckIcon />
+                          </span>
+                          <span className="min-w-0">{item.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
               </div>
             </FrostedPanel>
@@ -153,30 +173,32 @@ export default function VisionRoleSection() {
                   {t("home.commitment.body")}
                 </p>
 
-                <div className="mt-8 divide-y divide-white/12">
-                  {commitments.map((c, i) => (
-                    <div key={`commitment-${i}`} className="py-5 first:pt-0">
-                      <div className="flex items-start justify-between gap-5">
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold leading-6 text-white md:text-base">
-                            {c.title}
-                          </p>
-                          <p className="mt-1 text-[11px] tracking-[0.2em] text-white/65 md:text-xs">
-                            {c.label}
-                          </p>
+                {showCommitments ? (
+                  <div className="mt-8 divide-y divide-white/12">
+                    {commitments.map((c) => (
+                      <div key={c.id} className="py-5 first:pt-0">
+                        <div className="flex items-start justify-between gap-5">
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold leading-6 text-white md:text-base">
+                              {c.title}
+                            </p>
+                            <p className="mt-1 text-[11px] tracking-[0.2em] text-white/65 md:text-xs">
+                              {c.label}
+                            </p>
+                          </div>
+
+                          <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/16 bg-white/10 text-white/80">
+                            <HexIcon />
+                          </span>
                         </div>
 
-                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/16 bg-white/10 text-white/80">
-                          <HexIcon />
-                        </span>
+                        <p className="mt-3 text-sm leading-7 text-white/80 md:text-base md:leading-8">
+                          {c.body}
+                        </p>
                       </div>
-
-                      <p className="mt-3 text-sm leading-7 text-white/80 md:text-base md:leading-8">
-                        {c.body}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </FrostedPanel>
           </div>

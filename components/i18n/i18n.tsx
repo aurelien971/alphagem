@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 export type Locale = "en" | "fr";
 type Dict = Record<string, string>;
@@ -21,42 +15,67 @@ type I18nCtx = {
 const I18nContext = createContext<I18nCtx | null>(null);
 
 async function fetchDict(page: string, locale: Locale): Promise<Dict> {
-  const res = await fetch(`/api/i18n/${page}/${locale}`, { cache: "no-store" });
-  if (!res.ok) throw new Error(page);
-  const json = await res.json();
-  return json?.strings ?? {};
+  try {
+    const url = `/api/i18n/${encodeURIComponent(page)}/${locale}?v=${Date.now()}`;
+
+    const res = await fetch(url, {
+      cache: "no-store",
+      credentials: "same-origin",
+    });
+
+    if (!res.ok) {
+      console.warn("i18n missing:", { page, locale, status: res.status });
+      return {};
+    }
+
+    const json = await res.json().catch(() => null);
+    const strings = (json && typeof json === "object" && (json as any).strings) ? (json as any).strings : {};
+    return strings ?? {};
+  } catch (err) {
+    console.warn("i18n fetch failed:", { page, locale, err });
+    return {};
+  }
 }
 
-const PAGES = [
-  "copy",
-  "home",
-  "about",
-  "services",
-  "portfolio",
-  "contact",
-];
+const PAGES = ["copy", "home", "about", "services", "portfolio", "contact"];
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(() => {
-    if (typeof window === "undefined") return "en";
-    return window.localStorage.getItem("locale") === "fr" ? "fr" : "en";
+    if (typeof window === "undefined") return "fr";
+
+    try {
+      const stored = window.localStorage.getItem("locale");
+      if (stored === "en" || stored === "fr") return stored;
+    } catch {
+      // ignore
+    }
+
+    return "fr";
   });
 
   const [dict, setDict] = useState<Dict>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     setIsLoading(true);
 
-    Promise.all(PAGES.map((p) => fetchDict(p, locale)))
+    Promise.allSettled(PAGES.map((p) => fetchDict(p, locale)))
       .then((results) => {
-        setDict(Object.assign({}, ...results));
+        if (cancelled) return;
+        const dicts = results
+          .filter((r): r is PromiseFulfilledResult<Dict> => r.status === "fulfilled")
+          .map((r) => r.value);
+
+        setDict(Object.assign({}, ...dicts));
       })
-      .catch((e) => {
-        console.error("i18n load failed", e);
-        setDict({});
-      })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [locale]);
 
   const value = useMemo<I18nCtx>(() => {
@@ -64,18 +83,18 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       locale,
       setLocale: (l) => {
         setLocaleState(l);
-        window.localStorage.setItem("locale", l);
+        try {
+          window.localStorage.setItem("locale", l);
+        } catch (err) {
+          console.warn("localStorage setItem failed:", err);
+        }
       },
       t: (key) => dict[key] ?? key,
       isLoading,
     };
   }, [locale, dict, isLoading]);
 
-  return (
-    <I18nContext.Provider value={value}>
-      {children}
-    </I18nContext.Provider>
-  );
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
 export function useI18n() {
@@ -83,17 +102,10 @@ export function useI18n() {
   if (!ctx) throw new Error("useI18n outside provider");
 
   const safeT = (key: string) => {
-    // While loading, return the key so components can render their structure
-    // Once loaded, if translation is missing, return empty string
-    if (ctx.isLoading) return key;
-    
     const out = ctx.t(key);
-
-    // If the output is literally the key (common fallback) or looks like a key, hide it
     if (!out) return "";
     if (out === key) return "";
     if (/[a-z0-9_-]+\.[a-z0-9_.-]+/i.test(out) && out.length <= 48) return "";
-
     return out;
   };
 

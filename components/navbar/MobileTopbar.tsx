@@ -23,7 +23,7 @@ export default function MobileTopbar({
         {/* ALWAYS BLUE LOGO */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Image
-            src="/wordmark4.png"
+            src="/wordmark6.png"
             alt="Alphagem"
             width={120}
             height={28}

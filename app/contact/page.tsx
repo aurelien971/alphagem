@@ -1,17 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useI18n } from "@/components/i18n/i18n";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-export default function ContactPage() {
-const { t } = useI18n();
-  const [status, setStatus] = useState<Status>("idle");
+function BulletIcon() {
+  return (
+    <span className="mt-[0.35rem] inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_16%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_5%,transparent)]">
+      <span className="h-1.5 w-1.5 rounded-full bg-current opacity-80" />
+    </span>
+  );
+}
 
-  // useEffect(() => {
-  //   setPage("contact");
-  // }, [setPage]);
+export default function ContactPage() {
+  const { t } = useI18n();
+  const [status, setStatus] = useState<Status>("idle");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,30 +53,14 @@ const { t } = useI18n();
     status === "sending"
       ? t("contact.badge.sending")
       : status === "sent"
-      ? t("contact.badge.sent")
-      : status === "error"
-      ? t("contact.badge.error")
-      : t("contact.badge.idle");
+        ? t("contact.badge.sent")
+        : status === "error"
+          ? t("contact.badge.error")
+          : t("contact.badge.idle");
 
   return (
-    <main className="min-h-dvh bg-[var(--background)] text-[var(--foreground)]">
-      <section className="mx-auto max-w-6xl px-4 pb-24 pt-28 md:pt-32">
-        <div className="max-w-3xl">
-          {/* <p className="text-xs tracking-[0.26em] opacity-60">
-            {t("contact.eyebrow")}
-          </p> */}
-
-          {/* <h1 className="mt-4 text-4xl font-semibold leading-[1.03] tracking-tight md:text-6xl">
-            {t("contact.title")}
-          </h1>
-
-          <p className="mt-6 max-w-[80ch] text-sm leading-7 opacity-75 md:text-base md:leading-8">
-            {t("contact.body")}
-          </p> */}
-        </div>
-
-        {/* <div className="mt-12 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" /> */}
-
+    <main className="bg-[var(--background)] text-[var(--foreground)]">
+      <section className="mx-auto max-w-6xl px-4 pb-20 pt-28 md:pt-32">
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
           <div className="rounded-[28px] border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_3%,transparent)] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.08)] md:p-10">
             <div className="flex items-start justify-between gap-6">
@@ -91,8 +79,8 @@ const { t } = useI18n();
                   status === "sent"
                     ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
                     : status === "error"
-                    ? "border-red-500/30 bg-red-500/10 text-red-700"
-                    : "border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_5%,transparent)] opacity-70",
+                      ? "border-red-500/30 bg-red-500/10 text-red-700"
+                      : "border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_5%,transparent)] opacity-70",
                 ].join(" ")}
               >
                 {badgeText}
@@ -185,12 +173,6 @@ const { t } = useI18n();
                   value={t("contact.direct.locationValue")}
                 />
               </div>
-
-              {/* <div className="mt-7 h-px w-full bg-[color:color-mix(in_oklab,var(--foreground)_10%,transparent)]" /> */}
-{/* 
-              <p className="mt-7 text-sm leading-7 opacity-75">
-                {t("contact.direct.brief")}
-              </p> */}
             </div>
 
             <div className="rounded-[28px] border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_3%,transparent)] p-6 md:p-8">
@@ -198,17 +180,17 @@ const { t } = useI18n();
                 {t("contact.whatWeDo.kicker")}
               </p>
 
-            <ul className="mt-5 space-y-3 text-sm leading-7 opacity-80">
+             <ul className="mt-5 space-y-3 text-sm leading-7 opacity-80">
   <li className="flex items-start gap-3">
-    <div className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+    <BulletIcon />
     <span>{t("contact.whatWeDo.item1")}</span>
   </li>
   <li className="flex items-start gap-3">
-    <div className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+    <BulletIcon />
     <span>{t("contact.whatWeDo.item2")}</span>
   </li>
   <li className="flex items-start gap-3">
-    <div className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+    <BulletIcon />
     <span>{t("contact.whatWeDo.item3")}</span>
   </li>
 </ul>
@@ -216,8 +198,7 @@ const { t } = useI18n();
           </div>
         </div>
 
-      
-        {/* <div className="mt-10 text-xs opacity-60">{t("contact.footer")}</div> */}
+        <div aria-hidden className="h-24 md:h-32" />
       </section>
     </main>
   );
@@ -262,13 +243,5 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
       <div className="text-xs tracking-[0.22em] opacity-55">{label}</div>
       <div className="text-sm font-medium opacity-85">{value}</div>
     </div>
-  );
-}
-
-function Dot() {
-  return (
-    <span className="mt-[0.55rem] inline-flex h-6 w-6 items-center justify-center rounded-full border border-[color:color-mix(in_oklab,var(--foreground)_14%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_4%,transparent)]">
-      <span className="h-1.5 w-1.5 rounded-full bg-[var(--foreground)] opacity-60" />
-    </span>
   );
 }

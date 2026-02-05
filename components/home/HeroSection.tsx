@@ -48,9 +48,11 @@ export default function HeroSection() {
     };
   }, []);
 
-  const titleClass = "text-base font-semibold tracking-wide text-white sm:text-lg";
+  const titleClass =
+    "text-sm font-semibold tracking-wide text-white sm:text-lg";
+
   const bodyClass =
-    "mt-3 max-w-prose text-base leading-7 text-white/85 sm:text-lg sm:leading-8";
+    "mt-2 max-w-prose text-sm leading-6 text-white/85 sm:mt-3 sm:text-lg sm:leading-8";
 
   return (
     <section className="relative h-dvh w-full overflow-hidden">

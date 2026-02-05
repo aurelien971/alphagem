@@ -4,6 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+type AssetsDoc = {
+  wordmarkLight?: string;
+  wordmarkDark?: string;
+};
+
 function getEffectiveDark() {
   if (typeof document === "undefined" || typeof window === "undefined") return true;
 
@@ -16,6 +21,7 @@ function getEffectiveDark() {
 
 export default function Footer() {
   const [isDarkEffective, setIsDarkEffective] = useState(true);
+  const [wordmark, setWordmark] = useState<{ light?: string; dark?: string }>({});
 
   useEffect(() => {
     const refresh = () => setIsDarkEffective(getEffectiveDark());
@@ -32,29 +38,54 @@ export default function Footer() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/assets", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (cancelled) return;
+        const data = (json ?? {}) as AssetsDoc;
+
+        setWordmark({
+          light: typeof data.wordmarkLight === "string" ? data.wordmarkLight : undefined,
+          dark: typeof data.wordmarkDark === "string" ? data.wordmarkDark : undefined,
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setWordmark({});
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const logoSrc = useMemo(() => {
-    return isDarkEffective ? "/logowhite.png" : "/wordmark4.png";
-  }, [isDarkEffective]);
+    const fallback = isDarkEffective ? "/logowhite.png" : "/wordmark4.png";
+    const remote = isDarkEffective ? wordmark.dark : wordmark.light;
+    return remote || fallback;
+  }, [isDarkEffective, wordmark.dark, wordmark.light]);
 
   return (
     <footer className="border-t border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[var(--background)]">
       <div className="mx-auto max-w-6xl px-4 py-12">
         <div className="grid gap-10 md:grid-cols-3 md:items-start">
           <div className="flex flex-col gap-4">
-  <Link
-    href="/contact"
-    className="text-xs tracking-[0.26em] opacity-60 transition-opacity hover:opacity-100"
-  >
-    CONTACT
-  </Link>
+            <Link
+              href="/contact"
+              className="text-xs tracking-[0.26em] opacity-60 transition-opacity hover:opacity-100"
+            >
+              CONTACT
+            </Link>
 
-  <a
-    href="mailto:contact@alphagem.net"
-    className="text-sm font-medium opacity-85 transition-opacity hover:opacity-100"
-  >
-    contact@alphagem.net
-  </a>
-</div>
+            <a
+              href="mailto:contact@alphagem.net"
+              className="text-sm font-medium opacity-85 transition-opacity hover:opacity-100"
+            >
+              contact@alphagem.net
+            </a>
+          </div>
 
           <div className="md:text-center">
             <Link href="/" className="inline-flex items-center justify-center">
@@ -63,14 +94,11 @@ export default function Footer() {
                 alt="Alphagem"
                 width={120}
                 height={28}
-                className="h-8 w-auto opacity-90"
-                priority={false}
+                className="h-6 w-auto shrink-0 opacity-90"
               />
             </Link>
 
-            <div className="mt-5 text-xs opacity-55">
-              © Copyright 2026 Alphagem Advisors
-            </div>
+            <div className="mt-5 text-xs opacity-55">© Copyright 2026 Alphagem Advisors</div>
           </div>
 
           <div className="md:text-right">
