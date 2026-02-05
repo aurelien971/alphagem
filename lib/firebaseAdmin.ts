@@ -1,19 +1,32 @@
 import { getApps, initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
-const projectId = process.env.FIREBASE_PROJECT_ID;
-const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+function getServiceAccount() {
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
-if (!projectId || !clientEmail || !privateKey) {
-  throw new Error("Missing FIREBASE_* env vars (PROJECT_ID, CLIENT_EMAIL, PRIVATE_KEY).");
+  if (!projectId || !clientEmail || !privateKey) {
+    throw new Error(
+      "Missing FIREBASE_* env vars (PROJECT_ID, CLIENT_EMAIL, PRIVATE_KEY)."
+    );
+  }
+
+  return { projectId, clientEmail, privateKey };
 }
 
-export const adminApp =
-  getApps().length > 0
+function getAdminApp() {
+  return getApps().length > 0
     ? getApps()[0]
     : initializeApp({
-        credential: cert({ projectId, clientEmail, privateKey }),
+        credential: cert(getServiceAccount()),
       });
+}
 
-export const adminDb = getFirestore(adminApp);
+// Export the db instance directly, not a function
+export const adminDb = getFirestore(getAdminApp());
+
+// Keep the function export for backwards compatibility if needed
+export function getAdminDb() {
+  return adminDb;
+}

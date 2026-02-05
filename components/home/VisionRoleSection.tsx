@@ -124,8 +124,8 @@ export default function VisionRoleSection() {
                   </p>
 
                   <ul className="mt-4 space-y-3 text-sm leading-7 text-white/85 md:text-base md:leading-8">
-                    {roleItems.map((txt) => (
-                      <li key={txt} className="flex gap-3">
+                    {roleItems.map((txt, i) => (
+                      <li key={`role-${i}`} className="flex gap-3">
                         <span className="mt-[0.2rem] inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/18 bg-white/10 text-white/90">
                           <CheckIcon />
                         </span>
@@ -154,8 +154,8 @@ export default function VisionRoleSection() {
                 </p>
 
                 <div className="mt-8 divide-y divide-white/12">
-                  {commitments.map((c) => (
-                    <div key={c.label} className="py-5 first:pt-0">
+                  {commitments.map((c, i) => (
+                    <div key={`commitment-${i}`} className="py-5 first:pt-0">
                       <div className="flex items-start justify-between gap-5">
                         <div className="min-w-0">
                           <p className="text-sm font-semibold leading-6 text-white md:text-base">

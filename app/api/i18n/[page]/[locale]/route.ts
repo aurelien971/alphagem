@@ -22,7 +22,7 @@ function flatten(obj: any, prefix = "", out: Record<string, string> = {}) {
 export async function GET(_: Request, ctx: { params: Promise<Params> }) {
   const { page, locale } = await ctx.params;
 
-  const snap = await adminDb.collection(page).doc(locale).get();
+const snap = await adminDb.collection(page).doc(locale).get(); 
   if (!snap.exists) {
     return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
   }

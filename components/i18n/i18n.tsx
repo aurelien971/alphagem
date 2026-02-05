@@ -83,6 +83,10 @@ export function useI18n() {
   if (!ctx) throw new Error("useI18n outside provider");
 
   const safeT = (key: string) => {
+    // While loading, return the key so components can render their structure
+    // Once loaded, if translation is missing, return empty string
+    if (ctx.isLoading) return key;
+    
     const out = ctx.t(key);
 
     // If the output is literally the key (common fallback) or looks like a key, hide it

@@ -1,8 +1,23 @@
 import { NextResponse } from "next/server";
-import { adminDb } from "@/lib/firebaseAdmin";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const snap = await adminDb.collection("assets").doc("global").get();
-  const data = snap.exists ? snap.data() : {};
-  return NextResponse.json({ ok: true, ...data });
+  try {
+    const { getAdminDb } = await import("@/lib/firebaseAdmin");
+    const db = getAdminDb();
+
+    const snap = await db.collection("assets").doc("global").get();
+    const data = snap.exists ? snap.data() : {};
+
+    return NextResponse.json({ ok: true, ...data }, { status: 200 });
+  } catch (err: any) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: err?.message ?? "assets_fetch_failed",
+      },
+      { status: 200 }
+    );
+  }
 }
