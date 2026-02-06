@@ -237,27 +237,21 @@ export default function Navbar() {
       </div>
 
       {mobileOpen && (
-        <MobileMenuOverlay
-          pathname={pathname}
-          lightNav={lightNav}
-          onClose={() => setMobileOpen(false)}
-          mode={mode}
-          setTheme={setTheme}
-          locale={locale}
-          setLocale={setLocale}
-          t={t}
-          overlayShell={overlayShell}
-          overlayCard={overlayCard}
-          pillWrap={pillWrap}
-          pillIdle={pillIdle}
-          pillActive={pillActive}
-          segBase={segBase}
-          segBtn={segBtn}
-          segTextBtn={segTextBtn}
-          overlayLinkIdle={overlayLinkIdle}
-          overlayLinkActive={overlayLinkActive}
-        />
-      )}
+  <MobileMenuOverlay
+    pathname={pathname}
+    lightNav={lightNav}
+    onClose={() => setMobileOpen(false)}
+    mode={mode}
+    setTheme={setTheme}
+    locale={locale}
+    setLocale={setLocale}
+    t={t}
+    overlayShell={overlayShell}
+    overlayCard={overlayCard}
+    overlayLinkIdle={overlayLinkIdle}
+    overlayLinkActive={overlayLinkActive}
+  />
+)}
     </header>
   );
 }
