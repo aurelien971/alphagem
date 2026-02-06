@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { IconAuto, IconClose, IconMoon, IconSun } from "./icons";
+import { IconClose, IconMoon, IconSun } from "./icons";
 
 type Mode = "light" | "dark" | "system";
 
@@ -48,12 +48,6 @@ export default function MobileMenuOverlay({
   t,
   overlayShell,
   overlayCard,
-  pillWrap,
-  pillIdle,
-  pillActive,
-  segBase,
-  segBtn,
-  segTextBtn,
   overlayLinkIdle,
   overlayLinkActive,
 }: {
@@ -67,12 +61,6 @@ export default function MobileMenuOverlay({
   t: (k: string) => string;
   overlayShell: string;
   overlayCard: string;
-  pillWrap: string;
-  pillIdle: string;
-  pillActive: string;
-  segBase: string;
-  segBtn: string;
-  segTextBtn: string;
   overlayLinkIdle: string;
   overlayLinkActive: string;
 }) {
@@ -86,18 +74,13 @@ export default function MobileMenuOverlay({
       />
 
       <div className="relative mx-auto flex h-full max-w-6xl flex-col px-4 pt-5 pb-10">
+        {/* Top bar */}
         <div className="flex items-center justify-between">
           <div className="w-10" />
 
           <Link href="/" className="flex items-center" onClick={onClose}>
             <Image
-              src={
-                pathname === "/" || pathname.startsWith("/services")
-                  ? "/wordmark6.png"
-                  : lightNav
-                    ? "/wordmark6.png"
-                    : "/wordmark6.png"
-              }
+              src="/wordmark6.png"
               alt="Alphagem"
               width={120}
               height={28}
@@ -119,71 +102,95 @@ export default function MobileMenuOverlay({
           </button>
         </div>
 
-        <div className="mt-6 grid gap-3 flex-1">
-          {/* Pills block (unchanged) */}
+        {/* Content */}
+        <div className="mt-1 grid flex-1 gap-3">
+          {/* Settings block */}
           <div className={["rounded-3xl p-4", overlayCard].join(" ")}>
-            <div className="flex items-center justify-center gap-2">
-              <div className={`flex items-center overflow-hidden rounded-full ${pillWrap}`}>
+            <div className="flex flex-col items-center gap-6 pt-2">
+              {/* Theme: horizontal (light/dark only) */}
+              <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={() => setTheme("light")}
                   aria-label={t("theme.light")}
-                  className={[segBase, segBtn, mode === "light" ? pillActive : pillIdle].join(" ")}
                   title={t("theme.light")}
+                  className={[
+                    "inline-flex items-center justify-center gap-2",
+                    "h-10 w-36 rounded-full border",
+                    "transition-opacity active:opacity-70",
+                    mode === "light"
+                      ? "border-black/15 bg-black/[0.04] opacity-100"
+                      : "border-black/10 bg-transparent opacity-55 hover:opacity-85",
+                  ].join(" ")}
                 >
                   <IconSun className="h-4 w-4" />
+                  <span className="text-sm tracking-wide">{t("theme.light")}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setTheme("dark")}
                   aria-label={t("theme.dark")}
-                  className={[segBase, segBtn, mode === "dark" ? pillActive : pillIdle].join(" ")}
                   title={t("theme.dark")}
+                  className={[
+                    "inline-flex items-center justify-center gap-2",
+                    "h-10 w-36 rounded-full border",
+                    "transition-opacity active:opacity-70",
+                    mode === "dark"
+                      ? "border-black/15 bg-black/[0.04] opacity-100"
+                      : "border-black/10 bg-transparent opacity-55 hover:opacity-85",
+                  ].join(" ")}
                 >
                   <IconMoon className="h-4 w-4" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setTheme("system")}
-                  aria-label={t("theme.auto")}
-                  className={[segBase, segBtn, mode === "system" ? pillActive : pillIdle].join(" ")}
-                  title={t("theme.auto")}
-                >
-                  <IconAuto className="h-4 w-4" />
+                  <span className="text-sm tracking-wide">{t("theme.dark")}</span>
                 </button>
               </div>
 
-              <div className={`flex items-center overflow-hidden rounded-full ${pillWrap}`}>
+              {/* Language: below */}
+              <div className="flex items-center gap-4">
                 <button
                   type="button"
-                  onClick={() => setLocale("en")}
-                  className={[segBase, segTextBtn, locale === "en" ? pillActive : pillIdle].join(
-                    " ",
-                  )}
+                  onClick={() => {
+                    console.log("[lang] click en");
+                    setLocale("en");
+                  }}
+                  className={[
+                    "text-sm tracking-wide select-none",
+                    "px-2 py-1 rounded-md",
+                    "active:opacity-60",
+                    locale === "en" ? "opacity-100" : "opacity-45",
+                  ].join(" ")}
                   aria-label="English"
                   title="English"
                 >
-                  {t("nav.lang.en")} 🇬🇧
+                  {t("nav.lang.en")} <span aria-hidden>🇬🇧</span>
                 </button>
+
+                <span className="opacity-30">|</span>
+
                 <button
                   type="button"
-                  onClick={() => setLocale("fr")}
-                  className={[segBase, segTextBtn, locale === "fr" ? pillActive : pillIdle].join(
-                    " ",
-                  )}
+                  onClick={() => {
+                    console.log("[lang] click fr");
+                    setLocale("fr");
+                  }}
+                  className={[
+                    "text-sm tracking-wide select-none",
+                    "px-2 py-1 rounded-md",
+                    "active:opacity-60",
+                    locale === "fr" ? "opacity-100" : "opacity-45",
+                  ].join(" ")}
                   aria-label="Français"
                   title="Français"
                 >
-                  {t("nav.lang.fr")} 🇫🇷
+                  {t("nav.lang.fr")} <span aria-hidden>🇫🇷</span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Pages list block (same markup you had) */}
-          <div className={["p-6 flex justify-center -mt-70", overlayCard].join(" ")}>
+          {/* Pages list */}
+          <div className={["p-6 flex justify-center", overlayCard].join(" ")}>
             <div className="w-full flex items-center justify-center">
               <div className="flex flex-col items-center gap-5 text-center">
                 <NavLink
@@ -240,6 +247,7 @@ export default function MobileMenuOverlay({
           </div>
         </div>
 
+        {/* Footer */}
         <div className="mt-auto pt-6 text-center text-xs opacity-60">
           © Copyright 2026 Alphagem Advisors
         </div>

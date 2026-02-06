@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+export const runtime = "nodejs";
+
 type Payload = {
   firstName: string;
   lastName: string;
   email: string;
   message: string;
 };
+
+const CONTACT_RECIPIENTS = [
+  "aureliennicolle@me.com",
+];
 
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -22,11 +28,15 @@ function escapeHtml(s: string) {
 }
 
 export async function POST(req: Request) {
+  console.log("---- /api/contact POST called ----");
+
   let body: Partial<Payload>;
 
   try {
     body = (await req.json()) as Partial<Payload>;
-  } catch {
+    console.log("Parsed body:", body);
+  } catch (err) {
+    console.error("Failed to parse JSON:", err);
     return NextResponse.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
@@ -35,11 +45,15 @@ export async function POST(req: Request) {
   const email = String(body.email ?? "").trim();
   const message = String(body.message ?? "").trim();
 
+  console.log("Sanitized payload:", { firstName, lastName, email, message });
+
   if (!firstName || !lastName || !email || !message) {
+    console.error("Missing fields");
     return NextResponse.json({ error: "Missing fields." }, { status: 400 });
   }
 
   if (!isValidEmail(email)) {
+    console.error("Invalid email format:", email);
     return NextResponse.json({ error: "Invalid email." }, { status: 400 });
   }
 
@@ -47,35 +61,54 @@ export async function POST(req: Request) {
   const port = Number(process.env.SMTP_PORT ?? "587");
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-
-  const to = process.env.CONTACT_TO_EMAIL || user;
   const from = process.env.CONTACT_FROM_EMAIL || user;
 
-  if (!host || !user || !pass || !to || !from) {
+  console.log("SMTP ENV:", {
+    host,
+    port,
+    user,
+    passExists: Boolean(pass),
+    from,
+    to: CONTACT_RECIPIENTS,
+  });
+
+  if (!host || !user || !pass || !from || !CONTACT_RECIPIENTS.length) {
+    console.error("SMTP misconfiguration");
     return NextResponse.json(
-      { error: "Email server not configured. Set SMTP_* and CONTACT_* env vars." },
+      { error: "Email server not configured." },
       { status: 500 }
     );
   }
 
+  console.log("Creating transporter…");
+
   const transporter = nodemailer.createTransport({
     host,
     port,
-    secure: port === 465,
+    secure: false,
     auth: { user, pass },
+    requireTLS: true,
+    tls: { minVersion: "TLSv1.2" },
   });
 
   try {
-    if (process.env.NODE_ENV !== "production") {
-      await transporter.verify();
-    }
+    console.log("Verifying transporter…");
+    await transporter.verify();
+    console.log("Transporter verified OK");
 
-    await transporter.sendMail({
+    console.log("Sending email…");
+
+    const info = await transporter.sendMail({
       from: `Website Contact <${from}>`,
-      to,
+      to: CONTACT_RECIPIENTS,
       replyTo: email,
       subject: `New message from ${firstName} ${lastName}`,
-      text: `First name: ${firstName}\nLast name: ${lastName}\nEmail: ${email}\n\nMessage:\n${message}`,
+      text: `First name: ${firstName}
+Last name: ${lastName}
+Email: ${email}
+
+Message:
+${message}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6;">
           <h2>New contact form message</h2>
@@ -90,9 +123,21 @@ export async function POST(req: Request) {
       `,
     });
 
+    console.log("Email sent successfully:", {
+      messageId: info.messageId,
+      accepted: info.accepted,
+      rejected: info.rejected,
+      response: info.response,
+    });
+
     return NextResponse.json({ ok: true });
-  } catch (e) {
-    console.error("Email send failed:", e);
+  } catch (err: any) {
+    console.error("EMAIL SEND FAILED");
+    console.error("Error message:", err?.message);
+    console.error("Error code:", err?.code);
+    console.error("Error response:", err?.response);
+    console.error("Full error:", err);
+
     return NextResponse.json({ error: "Failed to send email." }, { status: 500 });
   }
 }
