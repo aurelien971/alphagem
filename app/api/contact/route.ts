@@ -10,9 +10,7 @@ type Payload = {
   message: string;
 };
 
-const CONTACT_RECIPIENTS = [
-  "aureliennicolle@me.com",
-];
+const CONTACT_RECIPIENTS = ["hari@alphagem.net, bruno@alphagem.net, guillaume@alphagem.net"];
 
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -74,10 +72,7 @@ export async function POST(req: Request) {
 
   if (!host || !user || !pass || !from || !CONTACT_RECIPIENTS.length) {
     console.error("SMTP misconfiguration");
-    return NextResponse.json(
-      { error: "Email server not configured." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Email server not configured." }, { status: 500 });
   }
 
   console.log("Creating transporter…");
@@ -85,10 +80,26 @@ export async function POST(req: Request) {
   const transporter = nodemailer.createTransport({
     host,
     port,
-    secure: false,
+    secure: false, // 587 uses STARTTLS
     auth: { user, pass },
     requireTLS: true,
     tls: { minVersion: "TLSv1.2" },
+
+    // timeouts so it doesn't hang silently
+    connectionTimeout: 20_000,
+    greetingTimeout: 20_000,
+    socketTimeout: 30_000,
+
+    // reduce auth negotiation weirdness
+    authMethod: "LOGIN",
+
+    // DEBUG: print SMTP conversation + nodemailer logs to your server console
+    logger: true,
+    debug: true,
+  });
+
+  transporter.on("error", (e) => {
+    console.error("[transporter error event]", e);
   });
 
   try {
@@ -117,7 +128,7 @@ ${message}`,
           <p><strong>Email:</strong> ${escapeHtml(email)}</p>
           <p><strong>Message:</strong></p>
           <pre style="white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-radius: 10px;">${escapeHtml(
-            message
+            message,
           )}</pre>
         </div>
       `,
