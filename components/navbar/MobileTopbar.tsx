@@ -9,21 +9,22 @@ export default function MobileTopbar({
   lightNav,
   onOpen,
   mobileHeaderText,
+  logoSrc,
 }: {
   pathname: string;
   lightNav: boolean;
   onOpen: () => void;
   mobileHeaderText: string;
+  logoSrc: string;
 }) {
   return (
     <div className="lg:hidden w-full">
       <div className="relative flex items-center justify-between">
         <div className="w-10" />
 
-        {/* ALWAYS BLUE LOGO */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
           <Image
-            src="/wordmark6.png"
+            src={logoSrc}
             alt="Alphagem"
             width={120}
             height={28}

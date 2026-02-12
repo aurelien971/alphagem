@@ -63,6 +63,7 @@ export default function Navbar() {
   }>({});
 
   const [wordmark, setWordmark] = useState<{ light?: string; dark?: string }>({});
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,7 +71,6 @@ export default function Navbar() {
     fetch("/api/assets", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((json) => {
-        
         if (cancelled) return;
 
         const data = (json ?? {}) as AssetsDoc;
@@ -95,12 +95,15 @@ export default function Navbar() {
           light: typeof data.wordmarkLight === "string" ? data.wordmarkLight : undefined,
           dark: typeof data.wordmarkDark === "string" ? data.wordmarkDark : undefined,
         });
+
+        setAssetsLoaded(true);
       })
       .catch((err) => {
         console.log("[Navbar] /api/assets fetch failed:", err);
         if (!cancelled) {
           setAssetColors({});
           setWordmark({});
+          setAssetsLoaded(true);
         }
       });
 
@@ -206,28 +209,30 @@ export default function Navbar() {
 
   const lightNav = true;
 
-  const logoSrc = wordmark.light || "/wordmark6.png";
+  const fetchedLogoSrc = resolved === "dark" ? wordmark.dark : wordmark.light;
+  const logoSrc = fetchedLogoSrc ?? "";
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div
-        className={[
-          shellClass,
-          navBgColor === "transparent" ? "backdrop-blur-xl" : "",
-        ].join(" ")}
+        className={[shellClass, navBgColor === "transparent" ? "backdrop-blur-xl" : ""].join(" ")}
         style={{ backgroundColor: navBgColor, opacity: 1 }}
       >
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="hidden lg:block">
             <Link href="/" className="flex items-center">
-              <Image
-                src={logoSrc}
-                alt="Alphagem"
-                width={120}
-                height={28}
-                priority
-                className="h-6 w-auto"
-              />
+              {assetsLoaded && fetchedLogoSrc ? (
+                <Image
+                  src={fetchedLogoSrc}
+                  alt="Alphagem"
+                  width={120}
+                  height={28}
+                  priority
+                  className="h-6 w-auto"
+                />
+              ) : (
+                <div className="h-6 w-[120px]" />
+              )}
             </Link>
           </div>
 
@@ -236,6 +241,7 @@ export default function Navbar() {
             lightNav={lightNav}
             onOpen={() => setMobileOpen(true)}
             mobileHeaderText={mobileHeaderText}
+            logoSrc={assetsLoaded && fetchedLogoSrc ? fetchedLogoSrc : "/"}
           />
 
           <DesktopNav
@@ -277,6 +283,7 @@ export default function Navbar() {
           overlayCard={overlayCard}
           overlayLinkIdle={overlayLinkIdle}
           overlayLinkActive={overlayLinkActive}
+          logoSrc={assetsLoaded && fetchedLogoSrc ? fetchedLogoSrc : "/"}
         />
       )}
     </header>

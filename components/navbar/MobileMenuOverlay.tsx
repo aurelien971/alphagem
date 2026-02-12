@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IconClose, IconMoon, IconSun } from "./icons";
@@ -50,6 +51,7 @@ export default function MobileMenuOverlay({
   overlayCard,
   overlayLinkIdle,
   overlayLinkActive,
+  logoSrc,
 }: {
   pathname: string;
   lightNav: boolean;
@@ -63,6 +65,7 @@ export default function MobileMenuOverlay({
   overlayCard: string;
   overlayLinkIdle: string;
   overlayLinkActive: string;
+  logoSrc: string;
 }) {
   return (
     <div className="fixed inset-0 z-[60] md:hidden">
@@ -74,13 +77,12 @@ export default function MobileMenuOverlay({
       />
 
       <div className="relative mx-auto flex h-full max-w-6xl flex-col px-4 pt-5 pb-10">
-        {/* Top bar */}
         <div className="flex items-center justify-between">
           <div className="w-10" />
 
           <Link href="/" className="flex items-center" onClick={onClose}>
             <Image
-              src="/wordmark6.png"
+              src={logoSrc}
               alt="Alphagem"
               width={120}
               height={28}
@@ -102,12 +104,9 @@ export default function MobileMenuOverlay({
           </button>
         </div>
 
-        {/* Content */}
         <div className="mt-1 grid flex-1 gap-3">
-          {/* Settings block */}
           <div className={["rounded-3xl p-4", overlayCard].join(" ")}>
             <div className="flex flex-col items-center gap-6 pt-2">
-              {/* Theme: horizontal (light/dark only) */}
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -146,14 +145,10 @@ export default function MobileMenuOverlay({
                 </button>
               </div>
 
-              {/* Language: below */}
               <div className="flex items-center gap-4">
                 <button
                   type="button"
-                  onClick={() => {
-                    console.log("[lang] click en");
-                    setLocale("en");
-                  }}
+                  onClick={() => setLocale("en")}
                   className={[
                     "text-sm tracking-wide select-none",
                     "px-2 py-1 rounded-md",
@@ -170,10 +165,7 @@ export default function MobileMenuOverlay({
 
                 <button
                   type="button"
-                  onClick={() => {
-                    console.log("[lang] click fr");
-                    setLocale("fr");
-                  }}
+                  onClick={() => setLocale("fr")}
                   className={[
                     "text-sm tracking-wide select-none",
                     "px-2 py-1 rounded-md",
@@ -189,7 +181,6 @@ export default function MobileMenuOverlay({
             </div>
           </div>
 
-          {/* Pages list */}
           <div className={["p-6 flex justify-center", overlayCard].join(" ")}>
             <div className="w-full flex items-center justify-center">
               <div className="flex flex-col items-center gap-5 text-center">
@@ -247,7 +238,6 @@ export default function MobileMenuOverlay({
           </div>
         </div>
 
-        {/* Footer */}
         <div className="mt-auto pt-6 text-center text-xs opacity-60">
           © Copyright 2026 Alphagem Advisors
         </div>
