@@ -15,12 +15,15 @@ type Mode = "light" | "dark" | "system";
 type Resolved = "light" | "dark";
 
 type AssetsDoc = {
+  homeColor?: string;
+  aboutColor?: string;
+
   contactColor?: string;
   portfolioColor?: string;
   servicesColor?: string;
 
-  wordmarkLight?: string; // blue
-  wordmarkDark?: string;  // white
+  wordmarkLight?: string;
+  wordmarkDark?: string;
 };
 
 function resolveTheme(mode: Mode): Resolved {
@@ -52,6 +55,8 @@ export default function Navbar() {
   const { locale, setLocale, t } = useI18n();
 
   const [assetColors, setAssetColors] = useState<{
+    home?: string;
+    about?: string;
     contact?: string;
     portfolio?: string;
     services?: string;
@@ -65,15 +70,22 @@ export default function Navbar() {
     fetch("/api/assets", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((json) => {
+        
         if (cancelled) return;
 
         const data = (json ?? {}) as AssetsDoc;
+        console.log("[assets keys]", Object.keys(data), data.homeColor, data.aboutColor);
+
+        const home = normalizeHex(data.homeColor);
+        const about = normalizeHex(data.aboutColor);
 
         const contact = normalizeHex(data.contactColor);
         const portfolio = normalizeHex(data.portfolioColor);
         const services = normalizeHex(data.servicesColor);
 
         setAssetColors({
+          home: home ?? undefined,
+          about: about ?? undefined,
           contact: contact ?? undefined,
           portfolio: portfolio ?? undefined,
           services: services ?? undefined,
@@ -152,13 +164,22 @@ export default function Navbar() {
   };
 
   const navBgColor = useMemo(() => {
+    if (pathname === "/") return assetColors.home ?? "transparent";
+    if (pathname.startsWith("/about")) return assetColors.about ?? "transparent";
     if (pathname.startsWith("/contact")) return assetColors.contact ?? "transparent";
     if (pathname.startsWith("/portfolio")) return assetColors.portfolio ?? "transparent";
     if (pathname.startsWith("/services")) return assetColors.services ?? "transparent";
     return "transparent";
-  }, [pathname, assetColors.contact, assetColors.portfolio, assetColors.services]);
+  }, [
+    pathname,
+    assetColors.home,
+    assetColors.about,
+    assetColors.contact,
+    assetColors.portfolio,
+    assetColors.services,
+  ]);
 
-  const shellClass = "backdrop-blur-xl border-b border-black/10";
+  const shellClass = "border-b border-black/10";
 
   const linkBase = "text-sm tracking-wide transition-colors";
   const linkActive = "text-[#0E3453]";
@@ -189,7 +210,13 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className={shellClass} style={{ backgroundColor: navBgColor }}>
+      <div
+        className={[
+          shellClass,
+          navBgColor === "transparent" ? "backdrop-blur-xl" : "",
+        ].join(" ")}
+        style={{ backgroundColor: navBgColor, opacity: 1 }}
+      >
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="hidden lg:block">
             <Link href="/" className="flex items-center">
@@ -237,21 +264,21 @@ export default function Navbar() {
       </div>
 
       {mobileOpen && (
-  <MobileMenuOverlay
-    pathname={pathname}
-    lightNav={lightNav}
-    onClose={() => setMobileOpen(false)}
-    mode={mode}
-    setTheme={setTheme}
-    locale={locale}
-    setLocale={setLocale}
-    t={t}
-    overlayShell={overlayShell}
-    overlayCard={overlayCard}
-    overlayLinkIdle={overlayLinkIdle}
-    overlayLinkActive={overlayLinkActive}
-  />
-)}
+        <MobileMenuOverlay
+          pathname={pathname}
+          lightNav={lightNav}
+          onClose={() => setMobileOpen(false)}
+          mode={mode}
+          setTheme={setTheme}
+          locale={locale}
+          setLocale={setLocale}
+          t={t}
+          overlayShell={overlayShell}
+          overlayCard={overlayCard}
+          overlayLinkIdle={overlayLinkIdle}
+          overlayLinkActive={overlayLinkActive}
+        />
+      )}
     </header>
   );
 }
