@@ -16,13 +16,24 @@ function BulletIcon() {
 export default function ContactPage() {
   const { t } = useI18n();
   const [status, setStatus] = useState<Status>("idle");
+  const [isHuman, setIsHuman] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isHuman) return;
+
     setStatus("sending");
 
     const form = e.currentTarget;
     const fd = new FormData(form);
+
+    const honeypot = String(fd.get("company") ?? "").trim();
+    if (honeypot) {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 1600);
+      return;
+    }
 
     const payload = {
       firstName: String(fd.get("firstName") ?? "").trim(),
@@ -42,6 +53,7 @@ export default function ContactPage() {
 
       setStatus("sent");
       form.reset();
+      setIsHuman(false);
       setTimeout(() => setStatus("idle"), 1200);
     } catch {
       setStatus("error");
@@ -115,6 +127,28 @@ export default function ContactPage() {
                 textarea
               />
 
+              {/* Honeypot field (hidden from real users) */}
+              <input
+                type="text"
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+
+              {/* Human check */}
+              <label className="flex items-center gap-3 rounded-2xl border border-[color:color-mix(in_oklab,var(--foreground)_12%,transparent)] bg-[color:color-mix(in_oklab,var(--foreground)_2%,transparent)] px-4 py-3 text-sm">
+                <input
+                  type="checkbox"
+                  checked={isHuman}
+                  onChange={(e) => setIsHuman(e.target.checked)}
+                  className="h-4 w-4 rounded border-[color:color-mix(in_oklab,var(--foreground)_25%,transparent)]"
+                  required
+                />
+                <span className="opacity-85">I am human</span>
+              </label>
+
               <div className="flex flex-col-reverse gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-s leading-6 opacity-60">
                   {t("contact.consent")}
@@ -122,11 +156,11 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
-                  disabled={status === "sending"}
+                  disabled={status === "sending" || !isHuman}
                   className={[
                     "inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity",
                     "bg-[#0E3453] text-white hover:opacity-90",
-                    status === "sending" ? "opacity-70" : "",
+status === "sending" || !isHuman ? "opacity-70 cursor-not-allowed" : "",
                   ].join(" ")}
                 >
                   {t("contact.cta")}
@@ -180,20 +214,20 @@ export default function ContactPage() {
                 {t("contact.whatWeDo.kicker")}
               </p>
 
-             <ul className="mt-5 space-y-3 text-sm leading-7 opacity-80">
-  <li className="flex items-start gap-3">
-    <BulletIcon />
-    <span>{t("contact.whatWeDo.item1")}</span>
-  </li>
-  <li className="flex items-start gap-3">
-    <BulletIcon />
-    <span>{t("contact.whatWeDo.item2")}</span>
-  </li>
-  <li className="flex items-start gap-3">
-    <BulletIcon />
-    <span>{t("contact.whatWeDo.item3")}</span>
-  </li>
-</ul>
+              <ul className="mt-5 space-y-3 text-sm leading-7 opacity-80">
+                <li className="flex items-start gap-3">
+                  <BulletIcon />
+                  <span>{t("contact.whatWeDo.item1")}</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <BulletIcon />
+                  <span>{t("contact.whatWeDo.item2")}</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <BulletIcon />
+                  <span>{t("contact.whatWeDo.item3")}</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
